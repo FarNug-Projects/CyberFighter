@@ -7,8 +7,6 @@
 	Rich Web Media Development
 */
 
-//DrawLib.js will carry functions for draw calls
-
 "use strict";
 
 //Create the global app object if needed
@@ -52,4 +50,4 @@ app.drawLib = {
 		ctx.restore();
 	},
 
-};//end of drawlib
+};
