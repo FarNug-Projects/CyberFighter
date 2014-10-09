@@ -18,13 +18,12 @@ var app = app || {};
 app.drawLib = {
 
 	//clear
-	clear: function(ctx, x, y, w, h)
-	{
+	clear: function(ctx, x, y, w, h) {
 		ctx.clearRect(x,y,w,h);
 	},
 
 	//draw a rectangle
-	drawRect: function(ctx, color, position, size, r){
+	drawRect: function(ctx, color, position, size, r) {
 		ctx.save();
 		ctx.translate(position.x,position.y);
 		ctx.rotate(r);
@@ -34,7 +33,7 @@ app.drawLib = {
 	},
 	
 	//draw a given image using the context
-	drawImage: function(ctx, img, sourceX, sourceY, sourceW, sourceH, position, size, r){
+	drawImage: function(ctx, img, sourceX, sourceY, sourceW, sourceH, position, size, r) {
 		//setup the context
 		ctx.save();
 		ctx.translate(position.x,position.y);
@@ -45,8 +44,7 @@ app.drawLib = {
 	},
 
 	//draws a stroke rectangle around where an object should be given it's position and size
-	debugRect: function(ctx, object)
-	{
+	debugRect: function(ctx, object) {
 		ctx.save();
 		ctx.strokeStyle = "black";
 		ctx.lineWidth = 5;

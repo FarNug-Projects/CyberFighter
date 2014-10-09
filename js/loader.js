@@ -52,15 +52,14 @@ app.IMAGES =
 app.keydown = [];
 
 //Run loader.js when the window loads
-window.onload = function()
-{
+window.onload = function() {
 	//When a key is pressed set its place in the array to true
-	window.addEventListener("keydown", function(e){
+	window.addEventListener("keydown", function(e) {
 		app.keydown[e.keyCode] = true;
 	});
 	
 	//when a key is released set its place in the array to false
-	window.addEventListener("keyup", function(e){
+	window.addEventListener("keyup", function(e) {
 		app.keydown[e.keyCode] = false;
 		if(e.keyCode == app.KEYBOARD["KEY_P"])
 			app.FriendlyFire.pausedPressed = true;
@@ -86,7 +85,7 @@ window.onload = function()
 		
 	//Handle the mouses position.  It calls a method in FriendlyFire because
 	//FriendlyFire knows about the canvas, therefore, we can get canvas coords, not screen coords
-	window.addEventListener("mousemove", function(e){
+	window.addEventListener("mousemove", function(e) {
 		var position = app.FriendlyFire.getMousePos(e);
 		app.mouse.x = position.x;
 		app.mouse.y = position.y;
