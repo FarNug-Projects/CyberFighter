@@ -17,7 +17,9 @@ app.cyber_fighter = {
 	// CONSTANT properties
     WIDTH : 600, 
     HEIGHT: 400,
-	FIRE_RATE: 5,
+	FIRE_RATE: 3,
+	
+	//properties
     canvas: undefined,
     ctx: undefined,
     ship: undefined,
@@ -27,11 +29,10 @@ app.cyber_fighter = {
 	utils: undefined,
 	playerBullets: [],
 	cooldown: 0,
-	score: 0,
     
     // methods
 	init : function(ship) {
-			console.log("Cyber_Fighter.init called");
+			console.log("app.cyber_fighter.init called");
 			// declare properties
 			this.canvas = document.querySelector('canvas');
 			this.canvas.width = this.WIDTH;
@@ -70,11 +71,12 @@ app.cyber_fighter = {
 	},
 	
 	drawSprites: function() {
+		this.drawLib.drawRect(this.ctx, "black", new app.vector(this.WIDTH/2,this.HEIGHT/2), new app.vector(this.WIDTH, this.HEIGHT));
 		//Draw
-		this.drawLib.backgroundGradient(this.ctx, this.WIDTH, this.HEIGHT);
+		//this.drawLib.backgroundGradient(this.ctx, this.WIDTH, this.HEIGHT);
 		
 		// Draw the text
-		this.drawLib.text(this.ctx, "Score: " + this.score, 25, 25, 12, "yellow");
+		//this.drawLib.text(this.ctx, "Score: " + this.score, 25, 25, 12, "yellow");
 		
 		// Draw the sprites
 		this.ship.draw(this.ctx);
@@ -127,7 +129,7 @@ app.cyber_fighter = {
 		var self = this;
 		
 		// Bullets vs enemies
-		this.playerBullets.forEach(function(bullet) {
+		/*this.playerBullets.forEach(function(bullet) {
 			self.enemies.forEach(function(enemy) {
 				if(self.collides(bullet, enemy)) {
 					enemy.active = false;
@@ -146,7 +148,7 @@ app.cyber_fighter = {
 				self.score -=5;
 			}
 		});
-		//console.log("Score: " + this.score);
+		//console.log("Score: " + this.score);*/
 	},
 	
 	collides: function(a,b) {
@@ -164,25 +166,3 @@ app.cyber_fighter = {
 		this.playerBullets.push(new app.Bullet(x, y, 200));
 	}
 }
-/*
-app.cyber_fighter = {
-
-	//constants
-	WIDTH: undefined,
-	HEIGHT: undefined,
-	
-	canvas: undefined,
-    ctx: undefined,
-	app: undefined,
-	gameState : undefined,
-	currentState : undefined,
-	
-	init : function()
-	{
-		this.canvas = document.querySelector('canvas');
-		this.canvas.width = this.WIDTH;
-		this.canvas.height = this.HEIGHT;
-		this.ctx = this.canvas.getContext('2d');
-	}
-}
-*/
