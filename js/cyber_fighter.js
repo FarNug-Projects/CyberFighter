@@ -15,14 +15,15 @@ var app = app || {};
 
 app.cyber_fighter = {
 	// CONSTANT properties
-    WIDTH : 600, 
-    HEIGHT: 400,
+    WIDTH : 800, 
+    HEIGHT: 600,
 	FIRE_RATE: 3,
 	
 	//properties
     canvas: undefined,
     ctx: undefined,
-    ship: undefined,
+    playerOneShip: undefined,
+	playerTwoShip: undefined,
 	drawLib: undefined,
 	dt: 1/60.0, 
 	app: undefined,
@@ -39,18 +40,23 @@ app.cyber_fighter = {
 			this.canvas.height = this.HEIGHT;
 			this.ctx = this.canvas.getContext('2d');
 			
-			// set up player ship
-			this.ship = ship;
+			// Set up both ships
+			this.playerOneShip = ship;
+			this.playerTwoShip = ship;
 			
 			// Create and IMG object
-			var image = new Image();
+			var p1image = new Image();
+			var p2image = new Image();
 			
 			// Get the ship PNG
-			image.src = this.app.IMAGES['shipImage'];
+			p1image.src = this.app.IMAGES['shipImage'];
+			p2image.src = this.app.IMAGES['shipImage'];
 			
 			// Set .image property of ship
-			this.ship.image = image;
-			this.ship.init();
+			this.playerOneShip.image = p1image;
+			this.playerOneShip.init();
+			this.playerTwoShip.image = p2image;
+			this.playerTwoShip.init();
 
 			this.update();
 	},
@@ -71,6 +77,7 @@ app.cyber_fighter = {
 	},
 	
 	drawSprites: function() {
+		// Draw background
 		this.drawLib.drawRect(this.ctx, "black", new app.vector(this.WIDTH/2,this.HEIGHT/2), new app.vector(this.WIDTH, this.HEIGHT));
 		//Draw
 		//this.drawLib.backgroundGradient(this.ctx, this.WIDTH, this.HEIGHT);
@@ -79,7 +86,8 @@ app.cyber_fighter = {
 		//this.drawLib.text(this.ctx, "Score: " + this.score, 25, 25, 12, "yellow");
 		
 		// Draw the sprites
-		this.ship.draw(this.ctx);
+		this.playerOneShip.draw(this.ctx);
+		this.playerTwoShip.draw(this.ctx);
 		
 		// Draw the bullets
 		for(var i = 0; i <this.playerBullets.length; i++) {
@@ -88,30 +96,56 @@ app.cyber_fighter = {
 	},
 	
 	moveSprites: function() {
-		if (this.app.keydown[this.app.KEYBOARD.KEY_LEFT]) {
-			this.ship.moveLeft(this.dt);
+		// Player One controls
+		if (this.app.keydown[this.app.KEYBOARD.KEY_A]) {
+			this.playerOneShip.moveLeft(this.dt);
 		}
-		if (this.app.keydown[this.app.KEYBOARD.KEY_RIGHT]) {
-			this.ship.moveRight(this.dt);
+		if (this.app.keydown[this.app.KEYBOARD.KEY_D]) {
+			this.playerOneShip.moveRight(this.dt);
 		}
-		if (this.app.keydown[this.app.KEYBOARD.KEY_DOWN]) {
-			this.ship.moveDown(this.dt);
+		if (this.app.keydown[this.app.KEYBOARD.KEY_S]) {
+			this.playerOneShip.moveDown(this.dt);
 		}
-		if (this.app.keydown[this.app.KEYBOARD.KEY_UP]) {
-			this.ship.moveUp(this.dt);
+		if (this.app.keydown[this.app.KEYBOARD.KEY_W]) {
+			this.playerOneShip.moveUp(this.dt);
 		}
 		
-		var paddingX = this.ship.width/2;
-		var paddingY = this.ship.height/2;
-		this.ship.x = this.utils.clamp(this.ship.x, paddingX, this.WIDTH-paddingX);
-		this.ship.y = this.utils.clamp(this.ship.y, paddingY, this.HEIGHT-paddingY);
+		var paddingX = this.playerOneShip.width/2;
+		var paddingY = this.playerOneShip.height/2;
+		this.playerOneShip.x = this.utils.clamp(this.playerOneShip.x, paddingX, this.WIDTH-paddingX);
+		this.playerOneShip.y = this.utils.clamp(this.playerOneShip.y, paddingY, this.HEIGHT-paddingY);
+		
+		// Player Two controls
+		if (this.app.keydown[this.app.KEYBOARD.KEY_LEFT]) {
+			this.playerTwoShip.moveLeft(this.dt);
+		}
+		if (this.app.keydown[this.app.KEYBOARD.KEY_RIGHT]) {
+			this.playerTwoShip.moveRight(this.dt);
+		}
+		if (this.app.keydown[this.app.KEYBOARD.KEY_DOWN]) {
+			this.playerTwoShip.moveDown(this.dt);
+		}
+		if (this.app.keydown[this.app.KEYBOARD.KEY_UP]) {
+			this.playerTwoShip.moveUp(this.dt);
+		}
+		
+		var paddingX = this.playerTwoShip.width/2;
+		var paddingY = this.playerTwoShip.height/2;
+		this.playerTwoShip.x = this.utils.clamp(this.playerTwoShip.x, paddingX, this.WIDTH-paddingX);
+		this.playerTwoShip.y = this.utils.clamp(this.playerTwoShip.y, paddingY, this.HEIGHT-paddingY);
 		
 		// Fire Bullets
 		this.cooldown --;
-		// Poll keyboard
-		if (this.cooldown <= 0 && app.keydown[app.KEYBOARD.KEY_SPACE]) {
-			this.shoot(this.ship.x - (paddingX+1), this.ship.y - paddingY);
-			this.shoot(this.ship.x + (paddingX-1), this.ship.y - paddingY);
+		// Player One shooting poll
+		if (this.cooldown <= 0 && app.keydown[app.KEYBOARD.KEY_F]) {
+			this.shoot(this.playerOneShip.x - (paddingX+1), this.playerOneShip.y - paddingY);
+			this.shoot(this.playerOneShip.x + (paddingX-1), this.playerOneShip.y - paddingY);
+			this.cooldown = 60/this.FIRE_RATE;
+		}
+		// Player Two shooting poll
+		if (this.cooldown <= 0 && app.keydown[app.KEYBOARD.KEY_CTRL]) {
+			this.shoot(this.playerTwoShip.x - (paddingX+1), this.playerTwoShip.y - paddingY);
+			this.shoot(this.playerTwoShip.x + (paddingX-1), this.playerTwoShip.y - paddingY);
 			this.cooldown = 60/this.FIRE_RATE;
 		}
 		
