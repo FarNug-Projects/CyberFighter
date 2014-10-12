@@ -19,13 +19,13 @@ var app = app || {};
 app.vector = function()
 {
 	//constructor for the vector class
-	function Vector(x,y)
+	function vector(x,y)
 	{
 		this.x = x;
 		this.y = y;
 	};
 	
-	var p = Vector.prototype;
+	var p = vector.prototype;
 	
 	//Vector magnitude function, determines and returns the length of the vector
 	p.magnitude = function()
@@ -49,7 +49,7 @@ app.vector = function()
 	//returns the resulting vector
 	p.sum = function(vec)
 	{
-		var output = new app.Vector(this.x + vec.x, this.y + vec.y);
+		var output = new app.vector(this.x + vec.x, this.y + vec.y);
 		return output;
 	};
 	
@@ -57,9 +57,9 @@ app.vector = function()
 	//returns the resulting vector
 	p.difference = function(vec)
 	{
-		var output = new app.Vector(this.x - vec.x, this.y - vec.y);
+		var output = new app.vector(this.x - vec.x, this.y - vec.y);
 		return output;
 	};
 	
-	return Vector;
+	return vector;
 }();

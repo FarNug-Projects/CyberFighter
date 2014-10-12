@@ -17,6 +17,8 @@ app.cyber_fighter = {
 	// CONSTANT properties
     WIDTH : 600, 
     HEIGHT: 400,
+	SHIP_WIDTH: 34,
+	SHIP_HEIGHT: 42,
 	FIRE_RATE: 3,
 	
 	//properties
@@ -29,9 +31,11 @@ app.cyber_fighter = {
 	utils: undefined,
 	playerBullets: [],
 	cooldown: 0,
+	player1: undefined,
+	player2: undefined,
     
     // methods
-	init : function(ship) {
+	init : function() {
 			console.log("app.cyber_fighter.init called");
 			// declare properties
 			this.canvas = document.querySelector('canvas');
@@ -39,18 +43,18 @@ app.cyber_fighter = {
 			this.canvas.height = this.HEIGHT;
 			this.ctx = this.canvas.getContext('2d');
 			
-			// set up player ship
-			this.ship = ship;
-			
+			/* Player 1 ship */
 			// Create and IMG object
 			var image = new Image();
 			
 			// Get the ship PNG
 			image.src = this.app.IMAGES['shipImage'];
 			
-			// Set .image property of ship
-			this.ship.image = image;
-			this.ship.init();
+			// set up player ship
+			this.player1 = new app.ship(image,this.WIDTH/4, this.HEIGHT-100, this.SHIP_WIDTH, this.SHIP_HEIGHT, 0, "red")
+			
+			/* Player 2 ship */
+			this.player2 = new app.ship(image,this.WIDTH/2, this.HEIGHT-200, this.SHIP_WIDTH, this.SHIP_HEIGHT, 0, "red")
 
 			this.update();
 	},
@@ -60,35 +64,39 @@ app.cyber_fighter = {
 		// Loop
 		requestAnimationFrame(this.update.bind(this));
 		
+		//handle input
+		this.handleKeyboard();
+		
 		// Update
 		this.moveSprites();
 		
 		// Check for collisions
-		this.checkForCollisions();
+		//this.checkForCollisions();
 		
 		// Draw
 		this.drawSprites();
 	},
 	
 	drawSprites: function() {
-		this.drawLib.drawRect(this.ctx, "black", new app.vector(this.WIDTH/2,this.HEIGHT/2), new app.vector(this.WIDTH, this.HEIGHT));
+		this.drawLib.drawBackground(this.ctx, "black", new app.vector(this.WIDTH/2,this.HEIGHT/2), new app.vector(this.WIDTH, this.HEIGHT));
 		//Draw
 		//this.drawLib.backgroundGradient(this.ctx, this.WIDTH, this.HEIGHT);
 		
-		// Draw the text
-		//this.drawLib.text(this.ctx, "Score: " + this.score, 25, 25, 12, "yellow");
 		
 		// Draw the sprites
-		this.ship.draw(this.ctx);
+		this.player1.draw(this.ctx);
+		this.player2.draw(this.ctx);
 		
 		// Draw the bullets
-		for(var i = 0; i <this.playerBullets.length; i++) {
+		/*for(var i = 0; i <this.playerBullets.length; i++) {
 			this.playerBullets[i].draw(this.ctx);
-		};
+		};*/
 	},
 	
 	moveSprites: function() {
-		if (this.app.keydown[this.app.KEYBOARD.KEY_LEFT]) {
+	
+	
+		/*if (this.app.keydown[this.app.KEYBOARD.KEY_LEFT]) {
 			this.ship.moveLeft(this.dt);
 		}
 		if (this.app.keydown[this.app.KEYBOARD.KEY_RIGHT]) {
@@ -99,9 +107,9 @@ app.cyber_fighter = {
 		}
 		if (this.app.keydown[this.app.KEYBOARD.KEY_UP]) {
 			this.ship.moveUp(this.dt);
-		}
+		}*/
 		
-		var paddingX = this.ship.width/2;
+		/*var paddingX = this.ship.width/2;
 		var paddingY = this.ship.height/2;
 		this.ship.x = this.utils.clamp(this.ship.x, paddingX, this.WIDTH-paddingX);
 		this.ship.y = this.utils.clamp(this.ship.y, paddingY, this.HEIGHT-paddingY);
@@ -122,10 +130,10 @@ app.cyber_fighter = {
 		
 		this.playerBullets = this.playerBullers = this.playerBullets.filter(function(bullet) {
 			return bullet.active;
-		});
+		});*/
 	},
 	
-	checkForCollisions: function() {
+	/*checkForCollisions: function() {
 		var self = this;
 		
 		// Bullets vs enemies
@@ -148,7 +156,7 @@ app.cyber_fighter = {
 				self.score -=5;
 			}
 		});
-		//console.log("Score: " + this.score);*/
+		//console.log("Score: " + this.score);
 	},
 	
 	collides: function(a,b) {
@@ -164,5 +172,34 @@ app.cyber_fighter = {
 	shoot: function(x, y) {
 		//console.log("Bang!");
 		this.playerBullets.push(new app.Bullet(x, y, 200));
+	},*/
+	
+	handleKeyboard: function()
+	{
+		if(this.app.keydown[this.app.KEYBOARD.KEY_A])
+		{
+			this.player1.rotate("left", this.dt);
+		}
+		if(this.app.keydown[this.app.KEYBOARD.KEY_D])
+		{
+			this.player1.rotate("right", this.dt);
+		}
+		if(this.app.keydown[this.app.KEYBOARD.KEY_W])
+		{
+			this.player1.move(this.dt);
+		}
+		if(this.app.keydown[this.app.KEYBOARD.KEY_LEFT])
+		{
+			this.player2.rotate("left", this.dt);
+		}
+		if(this.app.keydown[this.app.KEYBOARD.KEY_RIGHT])
+		{
+			this.player2.rotate("right", this.dt);
+		}
+		if(this.app.keydown[this.app.KEYBOARD.KEY_UP])
+		{
+			this.player2.move(this.dt);
+		}
+	
 	}
 }

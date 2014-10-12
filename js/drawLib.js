@@ -19,9 +19,9 @@ app.drawLib = {
 	clear: function(ctx, x, y, w, h) {
 		ctx.clearRect(x,y,w,h);
 	},
-
+	
 	//draw a rectangle
-	drawRect: function(ctx, color, position, size, r) {
+	drawBackground: function(ctx, color, position, size, r) {
 		ctx.save();
 		ctx.translate(position.x,position.y);
 		ctx.rotate(r);
@@ -29,15 +29,26 @@ app.drawLib = {
 		ctx.fillRect(-size.x/2,-size.y/2,size.x, size.y);
 		ctx.restore();
 	},
+
+	//draw a rectangle
+	drawRect: function(ctx, color, position, size, r) {
+		ctx.save();
+		ctx.translate(position.x - size.x/2,position.y-size.y/2);
+		ctx.rotate(r);
+		ctx.fillStyle = color;
+		ctx.fillRect(-size.x/2,-size.y/2,size.x, size.y);
+		ctx.restore();
+	},
 	
 	//draw a given image using the context
-	drawImage: function(ctx, img, sourceX, sourceY, sourceW, sourceH, position, size, r) {
+	drawImage: function(ctx, img, sourcePos, sourceSize, position, size, r) {
 		//setup the context
 		ctx.save();
 		ctx.translate(position.x,position.y);
-		ctx.rotate(r);
+		ctx.rotate(r * (Math.PI/180));
+		
 		//display image
-		ctx.drawImage(img, sourceX, sourceY, sourceW, sourceH, 0, 0, size.x, size.y);
+		ctx.drawImage(img, sourcePos.x, sourcePos.y, sourceSize.x, sourceSize.y, -size.x/2, -size.y/2, size.x, size.y);
 		ctx.restore();
 	},
 

@@ -15,8 +15,9 @@ app.KEYBOARD = {
 	"KEY_LEFT": 37,
 	"KEY_UP": 38,
 	"KEY_RIGHT": 39,
-	"KEY_DOWN": 40,
-	"KEY_SPACE": 32
+	"KEY_A": 65,
+	"KEY_W": 87,
+	"KEY_D": 68,
 };
 
 app.IMAGES = 
@@ -35,7 +36,7 @@ window.onload = function(){
 	console.log("window.onload called");
 	app.cyber_fighter.app = app;
 	app.cyber_fighter.drawLib = app.drawLib;
-	app.ship.drawLib = app.drawLib;
+	app.ship.prototype.app = app;
 	app.cyber_fighter.utils = app.utils;
 	
 	window.addEventListener("keydown",function(e)
