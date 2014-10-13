@@ -133,7 +133,7 @@ app.cyber_fighter = {
 	
 	handleKeyboard: function()
 	{
-		//player 1 input
+		//Player 1 input
 		if(this.app.keydown[this.app.KEYBOARD.KEY_A])
 		{
 			this.player1.rotate("left", this.dt);
@@ -150,7 +150,8 @@ app.cyber_fighter = {
 		{
 			this.player1.shoot();
 		}
-		//player 2 input
+		
+		//Player 2 input
 		if(this.app.keydown[this.app.KEYBOARD.KEY_J])
 		{
 			this.player2.rotate("left", this.dt);

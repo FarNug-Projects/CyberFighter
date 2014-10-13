@@ -16,6 +16,9 @@ app.Bullet = function() {
 		this.position = new app.vector(x,y);
 		this.speed = speed;
 		this.angle = angle;
+		
+		this.screenWidth = app.cyber_fighter.WIDTH;
+		this.screenHeight = app.cyber_fighter.HEIGHT;
 	}
 	
 	var p = Bullet.prototype;
@@ -33,7 +36,7 @@ app.Bullet = function() {
 		//var changeVelocity = new app.vector(vx*dt, vy*dt);
 		//this.position += changeVelocity;
 		
-		if(checkBounds(this.position.x, this.position.y) == false) {
+		if(checkBounds(this.position.x, this.position.y, ctx) == false) {
 			this.active = false;
 			//console.log("A Bullet has been deactivated");
 		}
@@ -46,11 +49,11 @@ app.Bullet = function() {
 	};
 	
 	// Private method
-	function checkBounds(x, y) {
-		if(x > 1000 || x < -1) {
+	function checkBounds(x, y, ctx) {
+		if(x > app.cyber_fighter.WIDTH || x < 0) {
 			return false;
 		}
-		if(y > 600 || y < -1) {
+		if(y > app.cyber_fighter.HEIGHT || y < 0) {
 			return false;
 		}
 		return true;

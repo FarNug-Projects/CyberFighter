@@ -93,7 +93,7 @@ app.ship = function()
 	};
 	
 	p.shoot = function() {
-		//console.log("Bang!");
+		console.log("Bang!");
 		
 		
 		// Adjusts the x and y position so the bullet spawns on the front of the ship based on the ship's angle.
