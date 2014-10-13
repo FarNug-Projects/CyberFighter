@@ -19,7 +19,7 @@ app.Bullet = function() {
 	}
 	
 	var p = Bullet.prototype;
-	p.update = function(dt) {
+	p.update = function(dt, ctx) {
 
 		
 		var rotationAsRadians = (this.angle - 90) * (Math.PI/180);
@@ -33,18 +33,27 @@ app.Bullet = function() {
 		//var changeVelocity = new app.vector(vx*dt, vy*dt);
 		//this.position += changeVelocity;
 		
-		this.active = this.active && inBounds(this.position.y);
+		if(checkBounds(this.position.x, this.position.y) == false) {
+			this.active = false;
+			//console.log("A Bullet has been deactivated");
+		}
 	};
 	
 	p.draw = function(ctx) {
-		console.log("I just got drawn!!!");
+		//console.log("I just got drawn!!!");
 		ctx.fillStyle = this.color;
 		ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
 	};
 	
 	// Private method
-	function inBounds(y) {
-		return y >= -10;
+	function checkBounds(x, y) {
+		if(x > 1000 || x < -1) {
+			return false;
+		}
+		if(y > 600 || y < -1) {
+			return false;
+		}
+		return true;
 	};
 	
 	return Bullet;

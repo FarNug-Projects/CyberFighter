@@ -93,16 +93,16 @@ app.ship = function()
 	};
 	
 	p.shoot = function() {
-		console.log("Bang!");
+		//console.log("Bang!");
 		
 		
 		// Adjusts the x and y position so the bullet spawns on the front of the ship based on the ship's angle.
 		var angleX = this.position.x - (Math.sin(this.angle) + this.size.y/2);
-		var angleY = this.position.y - (Math.cos(this.angle) + this.size.y/2);
+		var angleY =(Math.cos(this.angle) * this.size.y/2);
 		//this.playerBullets.push(new this.app.Bullet(this.position.x - this.size.x/2, this.position.y - this.size.y, 200));
 		
-		var posX
-		this.playerBullets.push(new this.app.Bullet(this.position.x, this.position.y, 200, this.angle));
+
+		this.playerBullets.push(new this.app.Bullet(this.position.x - this.size.x/2, this.position.y - this.size.y/2, 200, this.angle));
 	};
 	
 	p.update = function(dt) {
