@@ -26,6 +26,9 @@ app.ship = function()
 		this.sourcePosition = new app.vector(28, 2);
 		this.sourceSize = new app.vector(17, 21);
 		
+		// Bullet array
+		this.playerBullets = [];
+		
 	}; //constructor
 	
 	ship.app = undefined;
@@ -36,8 +39,10 @@ app.ship = function()
 		console.log("app.ship.init() called");
 	},*/
 	
-	p.draw = function(ctx)
+	p.draw = function(dt, ctx)
 	{	
+		ctx.save();
+	
 		var center = new app.vector(this.size.x/2, this.size.y/2);
 		
 		//if no image, draw a rectangle
@@ -49,6 +54,14 @@ app.ship = function()
 		{
 			app.drawLib.drawImage(ctx, this.image, this.sourcePosition, this.sourceSize, this.position.difference(center), this.size, this.angle);this.position, this.size, this.angle
 		}
+
+		ctx.restore();
+		
+		for (var i=0; i < this.playerBullets.length; i++) {
+			this.playerBullets[i].draw(ctx);
+		}
+		
+		this.update(dt);
 	};
 	
 	//input methods
@@ -77,6 +90,28 @@ app.ship = function()
 		// update the x and y of the player
 		this.position.x += vx * dt;
 		this.position.y += vy * dt;
+	};
+	
+	p.shoot = function() {
+		console.log("Bang!");
+		
+		
+		// Adjusts the x and y position so the bullet spawns on the front of the ship based on the ship's angle.
+		var angleX = this.position.x - (Math.sin(this.angle) + this.size.y/2);
+		var angleY =(Math.cos(this.angle) * this.size.y/2);
+		//this.playerBullets.push(new this.app.Bullet(this.position.x - this.size.x/2, this.position.y - this.size.y, 200));
+		
+
+		this.playerBullets.push(new this.app.Bullet(this.position.x - this.size.x/2, this.position.y - this.size.y/2, 200, this.angle));
+	};
+	
+	p.update = function(dt) {
+		//console.log("I'm actually doing something!!!");		
+		// Move the bullets
+		for (var i=0; i < this.playerBullets.length; i++) {
+			this.playerBullets[i].update(dt);
+		}
+		this.playerBullets = this.playerBullets.filter(function (bullet){return bullet.active;});
 	};
 	
 	return ship;
