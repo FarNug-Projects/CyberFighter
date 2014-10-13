@@ -17,6 +17,13 @@ app.KEYBOARD = {
 	"KEY_RIGHT": 39,
 	"KEY_DOWN": 40,
 	"KEY_CTRL": 17,
+	
+	"KEY_J": 74,
+	"KEY_I": 73,
+	"KEY_L": 76,
+	"KEY_K": 75,
+	"KEY_H": 72,
+	
 	"KEY_W": 87,
 	"KEY_A": 65,
 	"KEY_S": 83,

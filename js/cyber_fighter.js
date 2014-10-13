@@ -29,7 +29,7 @@ app.cyber_fighter = {
 	dt: 1/60.0, 
 	app: undefined,
 	utils: undefined,
-	playerBullets: [],
+	//playerBullets: [],
 	cooldown: 0,
 	player1: undefined,
 	player2: undefined,
@@ -68,7 +68,9 @@ app.cyber_fighter = {
 		this.handleKeyboard();
 		
 		// Update
-		this.moveSprites();
+		//this.moveSprites();
+		/*this.player1.handleBullets(this.dt, this.ctx);
+		this.player2.handleBullets(this.dt, this.ctx);*/
 		
 		// Check for collisions
 		//this.checkForCollisions();
@@ -84,53 +86,17 @@ app.cyber_fighter = {
 		
 		
 		// Draw the sprites
-		this.player1.draw(this.ctx);
-		this.player2.draw(this.ctx);
-		
-		// Draw the bullets
-		/*for(var i = 0; i <this.playerBullets.length; i++) {
-			this.playerBullets[i].draw(this.ctx);
-		};*/
+		this.player1.draw(this.dt, this.ctx);
+		this.player2.draw(this.dt, this.ctx);
+	},
+	
+	shoot: function(x, y) {
+		//console.log("Bang!");
+		this.player1Bullets.push(new app.Bullet(x, y, 200));
 	},
 	
 	moveSprites: function() {
 	
-	
-		/*if (this.app.keydown[this.app.KEYBOARD.KEY_LEFT]) {
-			this.ship.moveLeft(this.dt);
-		}
-		if (this.app.keydown[this.app.KEYBOARD.KEY_RIGHT]) {
-			this.ship.moveRight(this.dt);
-		}
-		if (this.app.keydown[this.app.KEYBOARD.KEY_DOWN]) {
-			this.ship.moveDown(this.dt);
-		}
-		if (this.app.keydown[this.app.KEYBOARD.KEY_UP]) {
-			this.ship.moveUp(this.dt);
-		}*/
-		
-		/*var paddingX = this.ship.width/2;
-		var paddingY = this.ship.height/2;
-		this.ship.x = this.utils.clamp(this.ship.x, paddingX, this.WIDTH-paddingX);
-		this.ship.y = this.utils.clamp(this.ship.y, paddingY, this.HEIGHT-paddingY);
-		
-		// Fire Bullets
-		this.cooldown --;
-		// Poll keyboard
-		if (this.cooldown <= 0 && app.keydown[app.KEYBOARD.KEY_SPACE]) {
-			this.shoot(this.ship.x - (paddingX+1), this.ship.y - paddingY);
-			this.shoot(this.ship.x + (paddingX-1), this.ship.y - paddingY);
-			this.cooldown = 60/this.FIRE_RATE;
-		}
-		
-		// Move the bullets
-		for (var i=0; i < this.playerBullets.length; i++) {
-			this.playerBullets[i].update(this.dt);
-		}
-		
-		this.playerBullets = this.playerBullers = this.playerBullets.filter(function(bullet) {
-			return bullet.active;
-		});*/
 	},
 	
 	/*checkForCollisions: function() {
@@ -176,6 +142,7 @@ app.cyber_fighter = {
 	
 	handleKeyboard: function()
 	{
+		//player 1 input
 		if(this.app.keydown[this.app.KEYBOARD.KEY_A])
 		{
 			this.player1.rotate("left", this.dt);
@@ -188,18 +155,26 @@ app.cyber_fighter = {
 		{
 			this.player1.move(this.dt);
 		}
-		if(this.app.keydown[this.app.KEYBOARD.KEY_LEFT])
+		if(this.app.keydown[this.app.KEYBOARD.KEY_F])
+		{
+			this.player1.shoot();
+		}
+		//player 2 input
+		if(this.app.keydown[this.app.KEYBOARD.KEY_J])
 		{
 			this.player2.rotate("left", this.dt);
 		}
-		if(this.app.keydown[this.app.KEYBOARD.KEY_RIGHT])
+		if(this.app.keydown[this.app.KEYBOARD.KEY_L])
 		{
 			this.player2.rotate("right", this.dt);
 		}
-		if(this.app.keydown[this.app.KEYBOARD.KEY_UP])
+		if(this.app.keydown[this.app.KEYBOARD.KEY_I])
 		{
 			this.player2.move(this.dt);
 		}
-	
+		if(this.app.keydown[this.app.KEYBOARD.KEY_H])
+		{
+			this.player2.shoot();
+		}
 	}
 }
