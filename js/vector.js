@@ -1,10 +1,24 @@
 /*
-	cyber_fighter.exe
+	Created originally for:
+			Friendly Fire
 	
-	Brian Nugent,
-	Ryan Farrell
+			Alex Fuerst, 
+			Mario Chuman,
+			David Erbelding,
+			Brian Nugent,
+			Ryan Farrell,
 
-	Rich Web Media Development
+			Game Design and Development 2
+			10/3/2014
+
+	Adapted for use in:
+		cyber_fighter.exe
+		
+		Brian Nugent,
+		Ryan Farrell
+
+		Rich Web Media Development
+		10/13/2014
 */
 
 

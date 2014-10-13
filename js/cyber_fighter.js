@@ -78,7 +78,7 @@ app.cyber_fighter = {
 	},
 	
 	drawSprites: function() {
-		this.drawLib.drawBackground(this.ctx, "black", new app.vector(this.WIDTH/2,this.HEIGHT/2), new app.vector(this.WIDTH, this.HEIGHT));
+		this.drawLib.drawBackground(this.ctx, "black", new app.vector(0, 0), new app.vector(this.WIDTH, this.HEIGHT));
 		//Draw
 		//this.drawLib.backgroundGradient(this.ctx, this.WIDTH, this.HEIGHT);
 		
@@ -133,8 +133,11 @@ app.cyber_fighter = {
 		});*/
 	},
 	
-	/*checkForCollisions: function() {
+	checkForCollisions: function() {
 		var self = this;
+		
+		//Player 1 vs Player 2 bullets
+		this.player2.bullets
 		
 		// Bullets vs enemies
 		/*this.playerBullets.forEach(function(bullet) {
@@ -156,7 +159,7 @@ app.cyber_fighter = {
 				self.score -=5;
 			}
 		});
-		//console.log("Score: " + this.score);
+		//console.log("Score: " + this.score);*/
 	},
 	
 	collides: function(a,b) {
@@ -169,7 +172,7 @@ app.cyber_fighter = {
 		return ax < bx + b.width && ax + a.width > bx && ay < by + b.height && ay + a.height > by;
 	},
 	
-	shoot: function(x, y) {
+	/*shoot: function(x, y) {
 		//console.log("Bang!");
 		this.playerBullets.push(new app.Bullet(x, y, 200));
 	},*/
