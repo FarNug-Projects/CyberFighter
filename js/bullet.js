@@ -3,12 +3,12 @@ var app = app || {};
 
 // another IIFE!
 app.Bullet = function() {
-	function Bullet(x, y, speed, angle) {
+	function Bullet(x, y, speed, angle, color) {
 		// ivars
 		this.active = true;
 		this.width = 3;
 		this.height = 3;
-		this.color = "#FFFFFF";
+		this.color = color;
 		this.position = new app.vector(x,y);
 		this.size = new app.vector(3, 3);
 		this.speed = speed;

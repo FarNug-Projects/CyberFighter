@@ -17,10 +17,20 @@ app.ship = function()
 		//instance variables of the ship
 		this.position = new app.vector(x,y);
 		this.size = new app.vector(width, height);
-		this.speed = 250;
 		this.angle = angle;
-		
 		this.angleChange = 4;
+		
+		//movement related variables
+		this.isAccelerating = false;
+		this.accelerationValue = 0.2;
+		this.accelerationLimit = 0.1;
+		this.acceleration = new app.vector(0,0);
+		this.velocity = new app.vector(0,0);
+		this.maxSpeed = 3;
+		this.friction = .99;
+		
+		this.rotationAsRadians = (this.angle - 90) * (Math.PI/180);
+		this.forward = new app.vector(Math.cos(this.rotationAsRadians),Math.sin(this.rotationAsRadians));
 		
 		//health related variables
 		this.health = 10;
@@ -132,6 +142,15 @@ app.ship = function()
 	
 	//update
 	p.update = function(dt) {	
+	
+		//update angle in radians
+		this.rotationAsRadians = (this.angle - 90) * (Math.PI/180);
+		this.calculateForward();
+	
+		//physics movement
+		this.move(dt);
+
+	
 		//change cooldown
 		this.cooldown --;
 	
@@ -180,15 +199,29 @@ app.ship = function()
 	//move: takes delta time to affect the speed
 	p.move = function(dt)
 	{
-		var rotationAsRadians = (this.angle - 90) * (Math.PI/180);
+		/*var rotationAsRadians = (this.angle - 90) * (Math.PI/180);
 		var vx = Math.cos(rotationAsRadians) * this.speed;
-		var vy = Math.sin(rotationAsRadians) * this.speed;
+		var vy = Math.sin(rotationAsRadians) * this.speed;*/
+		
+		var forwardAccel = this.forward.mult(this.accelerationValue)
+		
+		var self = this;
+		if(this.isAccelerating)
+		{
+			this.acceleration = new app.vector(forwardAccel.x, forwardAccel.y);
+			this.acceleration.limit(this.accelerationLimit);
+			
+			this.velocity = this.velocity.sum(this.acceleration);
+			this.velocity.limit(this.maxSpeed);
+		}
+		
+		this.velocity = this.velocity.mult(this.friction);
 		
 		// update the x and y of the player
-		this.position.x += vx * dt;
-		this.position.y += vy * dt;
+		this.position = this.position.sum(this.velocity);
 	};
 	
+	//shoot: spawn a bullet at the front of the ship
 	p.shoot = function() {
 		if(this.cooldown <= 0)
 		{
@@ -197,14 +230,12 @@ app.ship = function()
 			
 			//spawn bullet code
 			// Adjusts the x and y position so the bullet spawns on the front of the ship based on the ship's angle.
-			var rotationAsRadians = (this.angle - 90) * (Math.PI/180);
-			var vx = Math.cos(rotationAsRadians) * (this.size.x/2);
-			var vy = Math.sin(rotationAsRadians) * (this.size.y/2);
-			var angleVec = new app.vector(vx, vy);
+			
+			var angleVec = new app.vector(this.forward.x * (this.size.x/2), this.forward.y * (this.size.y/2));
 			
 			var sumVec = this.position.sum(angleVec);
 
-			this.bullets.push(new this.app.Bullet(sumVec.x, sumVec.y, 200, this.angle));
+			this.bullets.push(new this.app.Bullet(sumVec.x, sumVec.y, 200, this.angle, this.color));
 		}
 	};
 	
@@ -226,6 +257,8 @@ app.ship = function()
 		if(this.lives >0)
 		{
 			self.position = self.spawnPosition;
+			self.acceleration = new app.vector(0,0);
+			self.velocity = new app.vector(0,0);
 			self.angle = self.spawnAngle;
 			self.health = self.maxHealth;
 			self.lives--;
@@ -236,5 +269,13 @@ app.ship = function()
 			//gameover code
 		}
 	};
+	
+	//calculate the forward vector
+	p.calculateForward = function()
+	{
+		this.forward.x = Math.cos(this.rotationAsRadians);
+		this.forward.y = Math.sin(this.rotationAsRadians);
+	};
+	
 	return ship;
 }();

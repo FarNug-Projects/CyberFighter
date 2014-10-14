@@ -75,5 +75,36 @@ app.vector = function()
 		return output;
 	};
 	
+	//set the magnitude of a vector
+	p.setMag = function(mag)
+	{
+		var angle = this.getAngle();
+		this.x = mag * Math.cos(angle);
+		this.y = mag * Math.sin(angle);
+	};
+	
+	//limit the magnitude of the vector
+	p.limit = function(limit)
+	{
+		var mag = this.magnitude();
+		if(mag > limit)
+		{
+			this.setMag(limit);
+		}
+	};
+	
+	//multiply the vector by a scalar
+	p.mult = function(scalar)
+	{
+		var output = new app.vector(this.x *= scalar, this.y *= scalar);
+		return output;
+	};
+	
+	//get the angle of a vector
+	p.getAngle = function()
+	{
+		return Math.atan2(this.y,this.x);
+	};
+	
 	return vector;
 }();

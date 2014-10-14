@@ -54,7 +54,7 @@ app.cyber_fighter = {
 			image.src = this.app.IMAGES['design1'];
 			
 			//create the ship
-			this.player1 = new app.ship(image,this.WIDTH/4, this.HEIGHT/2, this.SHIP_WIDTH, this.SHIP_HEIGHT, 90, "purple")
+			this.player1 = new app.ship(image,this.WIDTH/4, this.HEIGHT/2, this.SHIP_WIDTH, this.SHIP_HEIGHT, 90, "red")
 			
 			/* Player 2 ship */
 			var image = new Image();
@@ -63,7 +63,7 @@ app.cyber_fighter = {
 			image.src = this.app.IMAGES['design1'];
 			
 			//create the ship
-			this.player2 = new app.ship(image,3*this.WIDTH/4, this.HEIGHT/2, this.SHIP_WIDTH, this.SHIP_HEIGHT, -90, "green")
+			this.player2 = new app.ship(image,3*this.WIDTH/4, this.HEIGHT/2, this.SHIP_WIDTH, this.SHIP_HEIGHT, -90, "blue")
 
 			this.update();
 	},
@@ -175,9 +175,14 @@ app.cyber_fighter = {
 		{
 			this.player1.rotate("right", this.dt);
 		}
-		if(this.app.keydown[this.app.KEYBOARD.KEY_W])
+		if(this.app.keydown[this.app.KEYBOARD.KEY_W]== true)
 		{
-			this.player1.move(this.dt);
+			//this.player1.move(this.dt);
+			this.player1.isAccelerating = true;
+		}
+		else if(this.app.keydown[this.app.KEYBOARD.KEY_W]== false)
+		{
+			this.player1.isAccelerating = false;
 		}
 		if(this.app.keydown[this.app.KEYBOARD.KEY_F])
 		{
@@ -193,9 +198,15 @@ app.cyber_fighter = {
 		{
 			this.player2.rotate("right", this.dt);
 		}
-		if(this.app.keydown[this.app.KEYBOARD.KEY_I])
+		if(this.app.keydown[this.app.KEYBOARD.KEY_I] == true)
 		{
-			this.player2.move(this.dt);
+			//this.player2.move(this.dt);
+			this.player2.isAccelerating = true;
+			console.log("Player 2 is accelerating: " + this.player2.isAccelerating);
+		}
+		else if(this.app.keydown[this.app.KEYBOARD.KEY_I] == false)
+		{
+			this.player2.isAccelerating = false;
 		}
 		if(this.app.keydown[this.app.KEYBOARD.KEY_H])
 		{
