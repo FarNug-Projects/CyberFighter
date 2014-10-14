@@ -119,7 +119,7 @@ app.cyber_fighter = {
 					//collision stuff
 					console.log("Player 1 shot");
 					bullet.active = false;
-					self.player1.hit();
+					self.player1.bulletHit();
 					
 				}
 			});
@@ -135,11 +135,21 @@ app.cyber_fighter = {
 					//collision stuff
 					console.log("Player 2 shot");
 					bullet.active = false;
-					self.player2.hit();
-					
+					self.player2.bulletHit();
 				}
 			
 			});
+		}
+		
+		if(this.player2.isActive == true && this.player2.isActive == true)
+		{
+			if(self.collides(self.player1, self.player2))
+				{
+					//collision stuff
+					console.log("The players are dumb");
+					self.player1.shipHit();
+					self.player2.shipHit();
+				}
 		}
 	},
 	

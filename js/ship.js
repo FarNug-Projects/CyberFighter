@@ -20,6 +20,8 @@ app.ship = function()
 		this.speed = 250;
 		this.angle = angle;
 		
+		this.angleChange = 4;
+		
 		//health related variables
 		this.health = 10;
 		this.maxHealth = 10;
@@ -167,10 +169,10 @@ app.ship = function()
 		switch(direction)
 		{
 			case "left":
-				this.angle -= 2;
+				this.angle -= this.angleChange;
 				break;
 			case "right":
-				this.angle += 2;
+				this.angle += this.angleChange;
 				break;
 		}
 	};
@@ -202,14 +204,20 @@ app.ship = function()
 			
 			var sumVec = this.position.sum(angleVec);
 
-			//this.bullets.push(new this.app.Bullet(this.position.x - this.size.x/2, this.position.y - this.size.y/2, 200, this.angle));
 			this.bullets.push(new this.app.Bullet(sumVec.x, sumVec.y, 200, this.angle));
 		}
 	};
 	
-	p.hit = function() {
+	//bullet collision resolution
+	p.bulletHit = function() {
 		this.health -= 1;
 		this.isHit = true;
+	};
+	
+	//ship collision resolution
+	p.shipHit = function() {
+		this.health = 0;
+		//this.isHit = true;
 	};
 	
 	p.respawn = function() {
@@ -223,20 +231,10 @@ app.ship = function()
 			self.lives--;
 			self.isActive = true;
 		}
-		
-		/*if(this.lives == 0) {
-			// GAME OVER FOR YOU
-			self.isActive = false;
-		} else {
-			self.lives -= 0.5;
-			self.isActive = false;
-			// TELEPORT OFF SCREEN OR HAVE BULLETS CHECK FOR ACTIVE PLAYER
-			setTimeout(function(){
-				console.log("HEllo");
-				self.health = 10;
-				self.isActive = true;
-			},1000);
-		}*/
+		else
+		{
+			//gameover code
+		}
 	};
 	return ship;
 }();
