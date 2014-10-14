@@ -20,6 +20,10 @@ app.ship = function()
 		this.speed = 250;
 		this.angle = angle;
 		
+		this.health = 10;
+		this.lives = 2;
+		this.isActive = true;
+		
 		//drawing variables
 		this.color = color;
 		this.image = image;
@@ -61,29 +65,31 @@ app.ship = function()
 	
 	p.draw = function(dt, ctx)
 	{	
-		ctx.save();
-	
-		var center = new app.vector(this.size.x/2, this.size.y/2);
+		if(this.isActive == true) {
+			ctx.save();
 		
-		//if no image, draw a rectangle
-		if(!this.image) 
-		{
-			app.drawLib.drawRect(ctx, this.color, this.position, this.size, this.angle);
-		} 
-		else  //if image, draw that instead
-		{
-			app.drawLib.drawImage(ctx, this.image, this.sourcePosition, this.sourceSize, this.position.difference(center), this.size, this.angle);this.position, this.size, this.angle
-		}
-		
-		//app.drawLib.debugRect(ctx, this);
+			var center = new app.vector(this.size.x/2, this.size.y/2);
+			
+			//if no image, draw a rectangle
+			if(!this.image) 
+			{
+				app.drawLib.drawRect(ctx, this.color, this.position, this.size, this.angle);
+			} 
+			else  //if image, draw that instead
+			{
+				app.drawLib.drawImage(ctx, this.image, this.sourcePosition, this.sourceSize, this.position.difference(center), this.size, this.angle);this.position, this.size, this.angle
+			}
+			
+			//app.drawLib.debugRect(ctx, this);
 
-		ctx.restore();
-		
-		for (var i=0; i < this.bullets.length; i++) {
-			this.bullets[i].draw(ctx);
+			ctx.restore();
+			
+			for (var i=0; i < this.bullets.length; i++) {
+				this.bullets[i].draw(ctx);
+			}
+			
+			this.update(dt);
 		}
-		
-		this.update(dt);
 	};
 	
 	//input methods
@@ -114,7 +120,6 @@ app.ship = function()
 	};
 	
 	p.shoot = function() {
-		console.log("Cooldown: " + this.cooldown);
 		if(this.cooldown <= 0)
 		{
 			//reset cooldown
@@ -143,7 +148,32 @@ app.ship = function()
 			this.bullets[i].update(dt);
 		}
 		this.bullets = this.bullets.filter(function (bullet){return bullet.active;});
+		
+		if(this.health == 0) {
+			this.respawn();
+		}
 	};
 	
+	p.hit = function() {
+		this.health -= 1;
+	};
+	
+	p.respawn = function() {
+		var self = this;
+		
+		if(this.lives == 0) {
+			// GAME OVER FOR YOU
+			self.isActive = false;
+		} else {
+			self.lives -= 0.5;
+			self.isActive = false;
+			// TELEPORT OFF SCREEN OR HAVE BULLETS CHECK FOR ACTIVE PLAYER
+			setTimeout(function(){
+				console.log("HEllo");
+				self.health = 10;
+				self.isActive = true;
+			},1000);
+		}
+	};
 	return ship;
 }();

@@ -116,6 +116,9 @@ app.cyber_fighter = {
 			{
 				//collision stuff
 				console.log("Player 1 shot");
+				bullet.active = false;
+				self.player1.hit();
+				
 			}
 		});
 		
@@ -126,6 +129,9 @@ app.cyber_fighter = {
 			{
 				//collision stuff
 				console.log("Player 2 shot");
+				bullet.active = false;
+				self.player2.hit();
+				
 			}
 		
 		});
