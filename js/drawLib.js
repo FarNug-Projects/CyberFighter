@@ -62,6 +62,15 @@ app.drawLib = {
 		//display image
 		ctx.drawImage(img, sourcePos.x, sourcePos.y, sourceSize.x, sourceSize.y, -size.x/2, -size.y/2, size.x, size.y);
 		ctx.restore();
-	}
+	},
 
+		//draws a stroke rectangle around where an object should be given it's position and size
+	debugRect: function(ctx, object)
+	{
+		ctx.save();
+		ctx.strokeStyle = "white";
+		ctx.lineWidth = 5;
+		ctx.strokeRect(object.position.x - object.size.x/2, object.position.y - object.size.y/2, object.size.x, object.size.y);
+		ctx.restore();
+	}
 };

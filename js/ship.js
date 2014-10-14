@@ -27,17 +27,13 @@ app.ship = function()
 		this.sourceSize = new app.vector(17, 21);
 		
 		// Bullet array
-		this.playerBullets = [];
+		this.bullets = [];
 		
 	}; //constructor
 	
 	ship.app = undefined;
 	
 	var p = ship.prototype;
-	
-	/*init: function(){
-		console.log("app.ship.init() called");
-	},*/
 	
 	p.draw = function(dt, ctx)
 	{	
@@ -54,11 +50,13 @@ app.ship = function()
 		{
 			app.drawLib.drawImage(ctx, this.image, this.sourcePosition, this.sourceSize, this.position.difference(center), this.size, this.angle);this.position, this.size, this.angle
 		}
+		
+		app.drawLib.debugRect(ctx, this);
 
 		ctx.restore();
 		
-		for (var i=0; i < this.playerBullets.length; i++) {
-			this.playerBullets[i].draw(ctx);
+		for (var i=0; i < this.bullets.length; i++) {
+			this.bullets[i].draw(ctx);
 		}
 		
 		this.update(dt);
@@ -82,7 +80,6 @@ app.ship = function()
 	//move: takes delta time to affect the speed
 	p.move = function(dt)
 	{
-		console.log("Move called");
 		var rotationAsRadians = (this.angle - 90) * (Math.PI/180);
 		var vx = Math.cos(rotationAsRadians) * this.speed;
 		var vy = Math.sin(rotationAsRadians) * this.speed;
@@ -93,25 +90,21 @@ app.ship = function()
 	};
 	
 	p.shoot = function() {
-		console.log("Bang!");
-		
-		
 		// Adjusts the x and y position so the bullet spawns on the front of the ship based on the ship's angle.
 		var angleX = this.position.x - (Math.sin(this.angle) + this.size.y/2);
 		var angleY =(Math.cos(this.angle) * this.size.y/2);
-		//this.playerBullets.push(new this.app.Bullet(this.position.x - this.size.x/2, this.position.y - this.size.y, 200));
+		//this.bullets.push(new this.app.Bullet(this.position.x - this.size.x/2, this.position.y - this.size.y, 200));
 		
 
-		this.playerBullets.push(new this.app.Bullet(this.position.x - this.size.x/2, this.position.y - this.size.y/2, 200, this.angle));
+		this.bullets.push(new this.app.Bullet(this.position.x - this.size.x/2, this.position.y - this.size.y/2, 200, this.angle));
 	};
 	
-	p.update = function(dt) {
-		//console.log("I'm actually doing something!!!");		
+	p.update = function(dt) {	
 		// Move the bullets
-		for (var i=0; i < this.playerBullets.length; i++) {
-			this.playerBullets[i].update(dt);
+		for (var i=0; i < this.bullets.length; i++) {
+			this.bullets[i].update(dt);
 		}
-		this.playerBullets = this.playerBullets.filter(function (bullet){return bullet.active;});
+		this.bullets = this.bullets.filter(function (bullet){return bullet.active;});
 	};
 	
 	return ship;

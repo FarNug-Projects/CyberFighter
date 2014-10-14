@@ -73,17 +73,15 @@ app.cyber_fighter = {
 		this.player2.update(this.dt);
 		
 		// Check for collisions
-		//this.checkForCollisions();
+		this.checkForCollisions();
 		
 		// Draw
 		this.drawSprites();
 	},
 	
 	drawSprites: function() {
+		//draw background
 		this.drawLib.drawBackground(this.ctx, "black", new app.vector(0, 0), new app.vector(this.WIDTH, this.HEIGHT));
-		//Draw
-		//this.drawLib.backgroundGradient(this.ctx, this.WIDTH, this.HEIGHT);
-		
 		
 		// Draw the sprites
 		this.player1.draw(this.dt, this.ctx);
@@ -93,46 +91,42 @@ app.cyber_fighter = {
 	moveSprites: function() {
 	
 	},
-	/*
+	
 	checkForCollisions: function() {
 		var self = this;
 		
 		//Player 1 vs Player 2 bullets
-		this.player2.bullets
-		
-		// Bullets vs enemies
-		this.playerBullets.forEach(function(bullet) {
-			self.enemies.forEach(function(enemy) {
-				if(self.collides(bullet, enemy)) {
-					enemy.active = false;
-					//enemy.explode();
-					bullet.active = false;
-					self.score++;
-				} // End of the if
-			}); // End of the enemy forEach
-		}); // End of the bullet forEach
-		
-		// Enemies vs ship
-		this.enemies.forEach(function(enemy) {
-			if (self.collides(enemy, self.ship)) {
-				enemy.explode();
-				//self.ship.explode();
-				self.score -=5;
+		this.player2.bullets.forEach(function(bullet)
+		{
+			if(self.collides(bullet, self.player1))
+			{
+				//collision stuff
+				console.log("Player 1 shot");
 			}
 		});
-		//console.log("Score: " + this.score);*/
+		
+		//Player 2 vs Player 1 bullets
+		this.player1.bullets.forEach(function(bullet)
+		{
+			if(self.collides(bullet, self.player2))
+			{
+				//collision stuff
+				console.log("Player 2 shot");
+			}
+		
+		});
 	},
 	
 	collides: function(a,b) {
 		//a = sprite 1, b = sprite 2
-		var ax = a.x - a.width/2;
-		var ay = a.y - a.height/2;
-		var bx = b.x - b.width/2;
-		var by = b.y - b.height/2;
+		var ax = a.position.x - a.size.x/2;
+		var ay = a.position.y - a.size.y/2;
+		var bx = b.position.x - b.size.x/2;
+		var by = b.position.y - b.size.y/2;
 		
-		return ax < bx + b.width && ax + a.width > bx && ay < by + b.height && ay + a.height > by;
+		return ax < bx + b.size.x && ax + a.size.x > bx && ay < by + b.size.y && ay + a.size.y > by;
 	},
-	*/
+	
 	
 	handleKeyboard: function()
 	{
