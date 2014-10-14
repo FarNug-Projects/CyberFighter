@@ -23,11 +23,35 @@ app.ship = function()
 		//drawing variables
 		this.color = color;
 		this.image = image;
-		this.sourcePosition = new app.vector(28, 2);
-		this.sourceSize = new app.vector(17, 21);
+		switch(color)
+		{
+			case "red":
+				this.sourcePosition = new app.vector(1, 1);
+				break;
+			case "orange":
+				this.sourcePosition = new app.vector(34, 1);
+				break;
+			case "yellow":
+				this.sourcePosition = new app.vector(67, 1);
+				break;
+			case "green":
+				this.sourcePosition = new app.vector(1, 34);
+				break;
+			case "blue":
+				this.sourcePosition = new app.vector(34, 34);
+				break;
+			case "purple":
+				this.sourcePosition = new app.vector(67, 34);
+				break;
+		}
+		this.sourceSize = new app.vector(32, 32);
 		
 		// Bullet array
 		this.bullets = [];
+		
+		//shooting related variables
+		this.cooldown = 0,
+		this.fireRate = 0.75;
 		
 	}; //constructor
 	
@@ -51,7 +75,7 @@ app.ship = function()
 			app.drawLib.drawImage(ctx, this.image, this.sourcePosition, this.sourceSize, this.position.difference(center), this.size, this.angle);this.position, this.size, this.angle
 		}
 		
-		app.drawLib.debugRect(ctx, this);
+		//app.drawLib.debugRect(ctx, this);
 
 		ctx.restore();
 		
@@ -90,20 +114,30 @@ app.ship = function()
 	};
 	
 	p.shoot = function() {
-		// Adjusts the x and y position so the bullet spawns on the front of the ship based on the ship's angle.
-		var rotationAsRadians = (this.angle - 90) * (Math.PI/180);
-		var vx = Math.cos(rotationAsRadians) * (this.size.x/2);
-		var vy = Math.sin(rotationAsRadians) * (this.size.y/2);
-		var angleVec = new app.vector(vx, vy);
-		//this.bullets.push(new this.app.Bullet(this.position.x - this.size.x/2, this.position.y - this.size.y, 200));
-		
-		var sumVec = this.position.sum(angleVec);
+		console.log("Cooldown: " + this.cooldown);
+		if(this.cooldown <= 0)
+		{
+			//reset cooldown
+			this.cooldown = 60/this.fireRate;
+			
+			//spawn bullet code
+			// Adjusts the x and y position so the bullet spawns on the front of the ship based on the ship's angle.
+			var rotationAsRadians = (this.angle - 90) * (Math.PI/180);
+			var vx = Math.cos(rotationAsRadians) * (this.size.x/2);
+			var vy = Math.sin(rotationAsRadians) * (this.size.y/2);
+			var angleVec = new app.vector(vx, vy);
+			
+			var sumVec = this.position.sum(angleVec);
 
-		//this.bullets.push(new this.app.Bullet(this.position.x - this.size.x/2, this.position.y - this.size.y/2, 200, this.angle));
-		this.bullets.push(new this.app.Bullet(sumVec.x, sumVec.y, 200, this.angle));
+			//this.bullets.push(new this.app.Bullet(this.position.x - this.size.x/2, this.position.y - this.size.y/2, 200, this.angle));
+			this.bullets.push(new this.app.Bullet(sumVec.x, sumVec.y, 200, this.angle));
+		}
 	};
 	
 	p.update = function(dt) {	
+		//change cooldown
+		this.cooldown --;
+	
 		// Move the bullets
 		for (var i=0; i < this.bullets.length; i++) {
 			this.bullets[i].update(dt);

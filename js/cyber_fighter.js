@@ -17,8 +17,8 @@ app.cyber_fighter = {
 	// CONSTANT properties
     WIDTH : 1000, 
     HEIGHT: 600,
-	SHIP_WIDTH: 34,
-	SHIP_HEIGHT: 42,
+	SHIP_WIDTH: 52,
+	SHIP_HEIGHT: 52,
 	//FIRE_RATE: 3,
 	
 	//properties
@@ -29,10 +29,10 @@ app.cyber_fighter = {
 	dt: 1/60.0, 
 	app: undefined,
 	utils: undefined,
-	//playerBullets: [],
-	cooldown: 0,
 	player1: undefined,
 	player2: undefined,
+	thisFrame:0,
+	lastFrame:0,
     
     // methods
 	init : function() {
@@ -43,18 +43,27 @@ app.cyber_fighter = {
 			this.canvas.height = this.HEIGHT;
 			this.ctx = this.canvas.getContext('2d');
 			
+			
+			//ship = new app.ship(image, x, y, width, height, angle, color);
+			
 			/* Player 1 ship */
 			// Create and IMG object
 			var image = new Image();
 			
 			// Get the ship PNG
-			image.src = this.app.IMAGES['shipImage'];
+			image.src = this.app.IMAGES['design1'];
 			
-			// set up player ship
-			this.player1 = new app.ship(image,this.WIDTH/4, this.HEIGHT-100, this.SHIP_WIDTH, this.SHIP_HEIGHT, 0, "red")
+			//create the ship
+			this.player1 = new app.ship(image,this.WIDTH/4, this.HEIGHT/2, this.SHIP_WIDTH, this.SHIP_HEIGHT, 90, "purple")
 			
 			/* Player 2 ship */
-			this.player2 = new app.ship(image,this.WIDTH/2, this.HEIGHT-200, this.SHIP_WIDTH, this.SHIP_HEIGHT, 0, "red")
+			var image = new Image();
+			
+			// Get the ship PNG
+			image.src = this.app.IMAGES['design1'];
+			
+			//create the ship
+			this.player2 = new app.ship(image,3*this.WIDTH/4, this.HEIGHT/2, this.SHIP_WIDTH, this.SHIP_HEIGHT, -90, "green")
 
 			this.update();
 	},
@@ -63,6 +72,11 @@ app.cyber_fighter = {
 		//this.drawLib.clear(this.ctx, 0, 0, this.WIDTH, this.HEIGHT);
 		// Loop
 		requestAnimationFrame(this.update.bind(this));
+		
+		/* DT update code Taken from Friendly Fire by Alex Fuerst, Mario Chuman, David Erbelding, Brian Nugent, Ryan Farrell for Game Design and Development 2 */
+		this.thisFrame = Date.now();
+		this.dt = (this.thisFrame - this.lastFrame)/1000;
+		this.lastFrame = Date.now();
 		
 		//handle input
 		this.handleKeyboard();

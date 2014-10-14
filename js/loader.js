@@ -33,7 +33,7 @@ app.KEYBOARD = {
 
 app.IMAGES = 
 {
-	shipImage: "images/Hunter1.png",
+	design1: "images/fighter.png",
 	//enemyImage: "images/Drone1.png"
 	};
 
@@ -73,7 +73,7 @@ window.onload = function(){
 	//load the image files
 	app.queue.loadManifest(
 	[
-		{id: "shipImage", src:"images/Hunter1.png"},
+		{id: "design1", src:"images/fighter.png"},
 		//{id: "enemyImage", src:"images/Drone1.png"},
 	]);
 }
