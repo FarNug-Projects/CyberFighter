@@ -20,42 +20,69 @@ app.ship = function()
 		this.speed = 250;
 		this.angle = angle;
 		
+		//health related variables
 		this.health = 10;
+		this.maxHealth = 10;
 		this.lives = 2;
 		this.isActive = true;
+		this.isHit = false;
 		
 		//drawing variables
 		this.color = color;
 		this.image = image;
-		switch(color)
-		{
-			case "red":
-				this.sourcePosition = new app.vector(1, 1);
-				break;
-			case "orange":
-				this.sourcePosition = new app.vector(34, 1);
-				break;
-			case "yellow":
-				this.sourcePosition = new app.vector(67, 1);
-				break;
-			case "green":
-				this.sourcePosition = new app.vector(1, 34);
-				break;
-			case "blue":
-				this.sourcePosition = new app.vector(34, 34);
-				break;
-			case "purple":
-				this.sourcePosition = new app.vector(67, 34);
-				break;
-		}
-		this.sourceSize = new app.vector(32, 32);
+		
+		//respawn variables
+		this.respawnTimer = 0;
+		this.timerStart = 50;
+		this.spawnPosition = new app.vector(x, y);
+		this.spawnAngle = angle;
 		
 		// Bullet array
 		this.bullets = [];
 		
 		//shooting related variables
-		this.cooldown = 0,
+		this.cooldown = 0;
 		this.fireRate = 0.75;
+		
+		//image related variables
+		//source rows and columns
+		var row1 = 1;
+		var row2 = 34;
+		var row3 = 67;
+		var row4 = 100;
+		var col1= 1;
+		var col2= 34;
+		var col3= 67;
+		
+		//figure out which part of the image based off of color
+		switch(color)
+		{	
+			case "red":
+				this.sourcePosition = new app.vector(col1, row1);
+				this.hitSource = new app.vector(col1, row3);
+				break;
+			case "orange":
+				this.sourcePosition = new app.vector(col2, row1);
+				this.hitSource = new app.vector(col2, row3);
+				break;
+			case "yellow":
+				this.sourcePosition = new app.vector(col3, row1);
+				this.hitSource = new app.vector(col3, row3);
+				break;
+			case "green":
+				this.sourcePosition = new app.vector(col1, row2);
+				this.hitSource = new app.vector(col1, row4);
+				break;
+			case "blue":
+				this.sourcePosition = new app.vector(col2, row2);
+				this.hitSource = new app.vector(col2, row4);
+				break;
+			case "purple":
+				this.sourcePosition = new app.vector(col3, row2);
+				this.hitSource = new app.vector(col3, row4);
+				break;
+		}
+		this.sourceSize = new app.vector(32, 32);
 		
 	}; //constructor
 	
@@ -66,6 +93,10 @@ app.ship = function()
 	p.draw = function(dt, ctx)
 	{	
 		if(this.isActive == true) {
+			for (var i=0; i < this.bullets.length; i++) {
+				this.bullets[i].draw(ctx);
+			}
+		
 			ctx.save();
 		
 			var center = new app.vector(this.size.x/2, this.size.y/2);
@@ -77,18 +108,55 @@ app.ship = function()
 			} 
 			else  //if image, draw that instead
 			{
-				app.drawLib.drawImage(ctx, this.image, this.sourcePosition, this.sourceSize, this.position.difference(center), this.size, this.angle);this.position, this.size, this.angle
+				var self = this;
+				if(this.isHit == false)
+				{
+					app.drawLib.drawImage(ctx, self.image, self.sourcePosition, self.sourceSize, self.position.difference(center), self.size, self.angle);
+				}
+				else
+				{
+					app.drawLib.drawImage(ctx, self.image, self.hitSource, self.sourceSize, self.position.difference(center), self.size, self.angle);
+					self.isHit = !self.isHit;
+				}
 			}
 			
 			//app.drawLib.debugRect(ctx, this);
 
 			ctx.restore();
 			
-			for (var i=0; i < this.bullets.length; i++) {
-				this.bullets[i].draw(ctx);
+			this.update(dt);
+		}
+	};
+	
+	//update
+	p.update = function(dt) {	
+		//change cooldown
+		this.cooldown --;
+	
+		// Move the bullets
+		for (var i=0; i < this.bullets.length; i++) {
+			this.bullets[i].update(dt);
+		}
+		this.bullets = this.bullets.filter(function (bullet){return bullet.active;});
+		
+		//respawn
+		var self = this;
+		if(this.health <= 0 && this.lives > 0) 
+		{
+			if(self.isActive)
+			{
+				self.respawnTimer = self.timerStart;
+				self.isActive = false;
+			}
+			else
+			{
+				self.respawnTimer--;
 			}
 			
-			this.update(dt);
+			if(self.respawnTimer <=0)
+			{
+				this.respawn();
+			}
 		}
 	};
 	
@@ -139,29 +207,24 @@ app.ship = function()
 		}
 	};
 	
-	p.update = function(dt) {	
-		//change cooldown
-		this.cooldown --;
-	
-		// Move the bullets
-		for (var i=0; i < this.bullets.length; i++) {
-			this.bullets[i].update(dt);
-		}
-		this.bullets = this.bullets.filter(function (bullet){return bullet.active;});
-		
-		if(this.health == 0) {
-			this.respawn();
-		}
-	};
-	
 	p.hit = function() {
 		this.health -= 1;
+		this.isHit = true;
 	};
 	
 	p.respawn = function() {
 		var self = this;
 		
-		if(this.lives == 0) {
+		if(this.lives >0)
+		{
+			self.position = self.spawnPosition;
+			self.angle = self.spawnAngle;
+			self.health = self.maxHealth;
+			self.lives--;
+			self.isActive = true;
+		}
+		
+		/*if(this.lives == 0) {
 			// GAME OVER FOR YOU
 			self.isActive = false;
 		} else {
@@ -173,7 +236,7 @@ app.ship = function()
 				self.health = 10;
 				self.isActive = true;
 			},1000);
-		}
+		}*/
 	};
 	return ship;
 }();

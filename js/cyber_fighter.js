@@ -110,31 +110,37 @@ app.cyber_fighter = {
 		var self = this;
 		
 		//Player 1 vs Player 2 bullets
-		this.player2.bullets.forEach(function(bullet)
+		if(this.player2.isActive == true)
 		{
-			if(self.collides(bullet, self.player1))
+			self.player2.bullets.forEach(function(bullet)
 			{
-				//collision stuff
-				console.log("Player 1 shot");
-				bullet.active = false;
-				self.player1.hit();
-				
-			}
-		});
+				if(self.collides(bullet, self.player1))
+				{
+					//collision stuff
+					console.log("Player 1 shot");
+					bullet.active = false;
+					self.player1.hit();
+					
+				}
+			});
+		}
 		
 		//Player 2 vs Player 1 bullets
-		this.player1.bullets.forEach(function(bullet)
+		if(this.player2.isActive == true)
 		{
-			if(self.collides(bullet, self.player2))
+			self.player1.bullets.forEach(function(bullet)
 			{
-				//collision stuff
-				console.log("Player 2 shot");
-				bullet.active = false;
-				self.player2.hit();
-				
-			}
-		
-		});
+				if(self.collides(bullet, self.player2))
+				{
+					//collision stuff
+					console.log("Player 2 shot");
+					bullet.active = false;
+					self.player2.hit();
+					
+				}
+			
+			});
+		}
 	},
 	
 	collides: function(a,b) {
