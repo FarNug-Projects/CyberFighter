@@ -91,12 +91,16 @@ app.ship = function()
 	
 	p.shoot = function() {
 		// Adjusts the x and y position so the bullet spawns on the front of the ship based on the ship's angle.
-		var angleX = this.position.x - (Math.sin(this.angle) + this.size.y/2);
-		var angleY =(Math.cos(this.angle) * this.size.y/2);
+		var rotationAsRadians = (this.angle - 90) * (Math.PI/180);
+		var vx = Math.cos(rotationAsRadians) * (this.size.x/2);
+		var vy = Math.sin(rotationAsRadians) * (this.size.y/2);
+		var angleVec = new app.vector(vx, vy);
 		//this.bullets.push(new this.app.Bullet(this.position.x - this.size.x/2, this.position.y - this.size.y, 200));
 		
+		var sumVec = this.position.sum(angleVec);
 
-		this.bullets.push(new this.app.Bullet(this.position.x - this.size.x/2, this.position.y - this.size.y/2, 200, this.angle));
+		//this.bullets.push(new this.app.Bullet(this.position.x - this.size.x/2, this.position.y - this.size.y/2, 200, this.angle));
+		this.bullets.push(new this.app.Bullet(sumVec.x, sumVec.y, 200, this.angle));
 	};
 	
 	p.update = function(dt) {	

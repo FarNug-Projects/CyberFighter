@@ -56,7 +56,8 @@ app.drawLib = {
 	drawImage: function(ctx, img, sourcePos, sourceSize, position, size, r) {
 		//setup the context
 		ctx.save();
-		ctx.translate(position.x,position.y);
+		//ctx.translate(position.x,position.y);
+		ctx.translate(position.x + size.x/2,position.y+size.y/2);
 		ctx.rotate(r * (Math.PI/180));
 		
 		//display image
