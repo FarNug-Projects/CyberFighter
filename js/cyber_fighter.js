@@ -96,10 +96,15 @@ app.cyber_fighter = {
 	drawSprites: function() {
 		//draw background
 		this.drawLib.drawBackground(this.ctx, "black", new app.vector(0, 0), new app.vector(this.WIDTH, this.HEIGHT));
+
+		
 		
 		// Draw the sprites
 		this.player1.draw(this.dt, this.ctx);
 		this.player2.draw(this.dt, this.ctx);
+		
+		//drawInterface(ctx, interfaceColor, infoColor)
+		this.drawLib.drawInterface(this.ctx, "gray", "black");
 	},
 	
 	moveSprites: function() {

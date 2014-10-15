@@ -283,20 +283,24 @@ app.ship = function()
 	// Private method
 	p.wrap = function() {
 		var self = this;
-		if(this.position.x > app.cyber_fighter.WIDTH + 5) {
-			self.position.x = 0;
+		
+		var screenWidth = app.cyber_fighter.WIDTH;
+		var screenHeight = app.cyber_fighter.HEIGHT;
+		
+		if(this.position.x > screenWidth + 10) {
+			self.position.x = -5;
 		}
-		else if (this.position.x < -5)
+		else if (this.position.x < -10)
 		{
-			self.position.x = app.cyber_fighter.WIDTH;
+			self.position.x = screenWidth + 5;
 		}
 		
-		if(this.position.y > app.cyber_fighter.HEIGHT + 5) {
-			self.position.y = 0;
+		if(this.position.y > (screenHeight - screenHeight/5) + 10) {
+			self.position.y = -5;
 		}
-		else if (this.position.y < -5)
+		else if (this.position.y < -10)
 		{
-			self.position.y = app.cyber_fighter.HEIGHT;
+			self.position.y = (screenHeight - screenHeight/5) + 5;
 		}
 	};
 	
