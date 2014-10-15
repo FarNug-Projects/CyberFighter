@@ -55,7 +55,7 @@ app.drawLib = {
 	},
 	
 	//Draw the interface
-	drawInterface: function(ctx, interfaceColor, infoColor) {
+	drawInterface: function(ctx, player1, player2, interfaceColor, infoColor) {
 		var WIDTH = app.cyber_fighter.WIDTH;
 		var HEIGHT = app.cyber_fighter.HEIGHT;
 		// Draws the "ui"
@@ -64,7 +64,8 @@ app.drawLib = {
 
 		var padding = 125;
 		
-		var infoBoxSize =  new app.vector(200, 75);
+		
+		var infoBoxSize =  new app.vector(225, 75);
 		var p1InfoBoxPos =  new app.vector(padding, interfacePos.y + ((interfaceSize.y/2) - (infoBoxSize.y/2)));
 		var p2InfoBoxPos =  new app.vector(WIDTH - infoBoxSize.x - padding, interfacePos.y + ((interfaceSize.y/2) - (infoBoxSize.y/2)));
 
@@ -76,7 +77,36 @@ app.drawLib = {
 		// Draw the player 2 info box
 		this.drawBackground(ctx, infoColor, p2InfoBoxPos, infoBoxSize);
 		
-
+		var healthPadding = 10;
+		var healthHeight =  p1InfoBoxPos.y + (infoBoxSize.y/2);
+		
+		//drawText(ctx, string, font, fillColor, position)
+		this.drawText(ctx, "Health:", "15pt Arial", "white", new app.vector(p1InfoBoxPos.x + healthPadding* 2, healthHeight- healthPadding));
+		this.drawText(ctx, "Health:", "15pt Arial", "white", new app.vector(p2InfoBoxPos.x + healthPadding* 2, healthHeight- healthPadding));
+		
+		this.drawText(ctx, "Lives: ", "15pt Arial", "white", new app.vector(p1InfoBoxPos.x + healthPadding* 2, healthHeight+ healthPadding*2));
+		this.drawText(ctx, "Lives: ", "15pt Arial", "white", new app.vector(p2InfoBoxPos.x + healthPadding* 2, healthHeight+ healthPadding*2));
+		this.drawText(ctx, player1.lives, "15pt Arial", "white", new app.vector(p1InfoBoxPos.x + (healthPadding* 10) + 50, healthHeight+ healthPadding*2));
+		this.drawText(ctx, player2.lives, "15pt Arial", "white", new app.vector(p2InfoBoxPos.x + (healthPadding* 10) + 50, healthHeight+ healthPadding*2));
+	
+		
+		/*ctx.save();
+		ctx.font = ;
+		ctx.fillStyle = ;
+		
+		ctx.fillText("Health:", p1InfoBoxPos.x + healthPadding* 2, healthHeight- healthPadding/3);
+		ctx.fillText("Health:", p2InfoBoxPos.x + healthPadding* 2, healthHeight- healthPadding/3);
+		
+		ctx.restore();*/
+		
+		// Draws player 1 health to the screen
+		for(var i=0; i < player1.health; i++) {
+			this.drawRect(ctx, player1.color, new app.vector(p1InfoBoxPos.x + (infoBoxSize.x/2) + healthPadding*(i+1), healthHeight- healthPadding/2), new app.vector(healthPadding, 20), 0);
+		}
+		// Draws player 2 health to the screen
+		for(var i=0; i < player2.health; i++) {
+			this.drawRect(ctx, player2.color, new app.vector(p2InfoBoxPos.x + (infoBoxSize.x/2) + healthPadding*(i+1), healthHeight- healthPadding/2), new app.vector(healthPadding, 20), 0);
+		}
 	},
 	
 	
@@ -101,6 +131,17 @@ app.drawLib = {
 		ctx.strokeStyle = "white";
 		ctx.lineWidth = 5;
 		ctx.strokeRect(object.position.x - object.size.x/2, object.position.y - object.size.y/2, object.size.x, object.size.y);
+		ctx.restore();
+	},
+	
+	drawText: function(ctx, string, font, fillColor, position)
+	{
+		ctx.save();
+		ctx.font = font;
+		ctx.fillStyle = fillColor;
+		
+		ctx.fillText(string, position.x, position.y);
+		
 		ctx.restore();
 	}
 };

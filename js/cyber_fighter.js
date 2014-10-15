@@ -54,7 +54,7 @@ app.cyber_fighter = {
 			image.src = this.app.IMAGES['design1'];
 			
 			//create the ship
-			this.player1 = new app.ship(image,this.WIDTH/4, this.HEIGHT/2, this.SHIP_WIDTH, this.SHIP_HEIGHT, 90, "red")
+			this.player1 = new app.ship(image,this.WIDTH/4, this.HEIGHT/2.5, this.SHIP_WIDTH, this.SHIP_HEIGHT, 90, "red")
 			
 			/* Player 2 ship */
 			var image = new Image();
@@ -63,7 +63,7 @@ app.cyber_fighter = {
 			image.src = this.app.IMAGES['design1'];
 			
 			//create the ship
-			this.player2 = new app.ship(image,3*this.WIDTH/4, this.HEIGHT/2, this.SHIP_WIDTH, this.SHIP_HEIGHT, -90, "blue")
+			this.player2 = new app.ship(image,3*this.WIDTH/4, this.HEIGHT/2.5, this.SHIP_WIDTH, this.SHIP_HEIGHT, -90, "blue")
 
 			this.update();
 	},
@@ -104,7 +104,7 @@ app.cyber_fighter = {
 		this.player2.draw(this.dt, this.ctx);
 		
 		//drawInterface(ctx, interfaceColor, infoColor)
-		this.drawLib.drawInterface(this.ctx, "gray", "black");
+		this.drawLib.drawInterface(this.ctx, this.player1, this.player2, "gray", "black");
 	},
 	
 	moveSprites: function() {
