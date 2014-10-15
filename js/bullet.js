@@ -6,11 +6,9 @@ app.Bullet = function() {
 	function Bullet(x, y, speed, angle, color) {
 		// ivars
 		this.active = true;
-		this.width = 3;
-		this.height = 3;
 		this.color = color;
 		this.position = new app.vector(x,y);
-		this.size = new app.vector(3, 3);
+		this.size = new app.vector(5, 5);
 		this.speed = speed;
 		this.angle = angle;
 		
@@ -21,8 +19,6 @@ app.Bullet = function() {
 	
 	var p = Bullet.prototype;
 	p.update = function(dt, ctx) {
-
-		
 		var rotationAsRadians = (this.angle - 90) * (Math.PI/180);
 		var vx = Math.cos(rotationAsRadians) * this.speed;
 		var vy = Math.sin(rotationAsRadians) * this.speed;
@@ -31,23 +27,19 @@ app.Bullet = function() {
 		this.position.x += vx * dt;
 		this.position.y += vy * dt;
 		
-		//var changeVelocity = new app.vector(vx*dt, vy*dt);
-		//this.position += changeVelocity;
-		
-		if(checkBounds(this.position.x, this.position.y, ctx) == false) {
+		if(checkBounds(this.position.x, this.position.y) == false) {
 			this.active = false;
 			//console.log("A Bullet has been deactivated");
 		}
 	};
 	
 	p.draw = function(ctx) {
-		//console.log("I just got drawn!!!");
 		ctx.fillStyle = this.color;
 		ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y);
 	};
 	
 	// Private method
-	function checkBounds(x, y, ctx) {
+	function checkBounds(x, y) {
 		if(x > app.cyber_fighter.WIDTH || x < 0) {
 			return false;
 		}

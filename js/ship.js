@@ -26,7 +26,7 @@ app.ship = function()
 		this.accelerationLimit = 0.1;
 		this.acceleration = new app.vector(0,0);
 		this.velocity = new app.vector(0,0);
-		this.maxSpeed = 3;
+		this.maxSpeed = 2.5;
 		this.friction = .99;
 		
 		this.rotationAsRadians = (this.angle - 90) * (Math.PI/180);
@@ -149,6 +149,7 @@ app.ship = function()
 	
 		//physics movement
 		this.move(dt);
+		this.wrap();
 
 	
 		//change cooldown
@@ -185,24 +186,23 @@ app.ship = function()
 	//rotate: take a string representing the key input for rotation
 	p.rotate = function(direction)
 	{
-		switch(direction)
+		if(this.isActive)
 		{
-			case "left":
-				this.angle -= this.angleChange;
-				break;
-			case "right":
-				this.angle += this.angleChange;
-				break;
+			switch(direction)
+			{
+				case "left":
+					this.angle -= this.angleChange;
+					break;
+				case "right":
+					this.angle += this.angleChange;
+					break;
+			}
 		}
 	};
 	
 	//move: takes delta time to affect the speed
 	p.move = function(dt)
-	{
-		/*var rotationAsRadians = (this.angle - 90) * (Math.PI/180);
-		var vx = Math.cos(rotationAsRadians) * this.speed;
-		var vy = Math.sin(rotationAsRadians) * this.speed;*/
-		
+	{	
 		var forwardAccel = this.forward.mult(this.accelerationValue)
 		
 		var self = this;
@@ -215,6 +215,7 @@ app.ship = function()
 			this.velocity.limit(this.maxSpeed);
 		}
 		
+		//multiply the velocity by friction to slow
 		this.velocity = this.velocity.mult(this.friction);
 		
 		// update the x and y of the player
@@ -223,7 +224,8 @@ app.ship = function()
 	
 	//shoot: spawn a bullet at the front of the ship
 	p.shoot = function() {
-		if(this.cooldown <= 0)
+	
+		if(this.cooldown <= 0 && this.isActive)
 		{
 			//reset cooldown
 			this.cooldown = 60/this.fireRate;
@@ -259,6 +261,7 @@ app.ship = function()
 			self.position = self.spawnPosition;
 			self.acceleration = new app.vector(0,0);
 			self.velocity = new app.vector(0,0);
+			self.bullets = [];
 			self.angle = self.spawnAngle;
 			self.health = self.maxHealth;
 			self.lives--;
@@ -275,6 +278,26 @@ app.ship = function()
 	{
 		this.forward.x = Math.cos(this.rotationAsRadians);
 		this.forward.y = Math.sin(this.rotationAsRadians);
+	};
+	
+	// Private method
+	p.wrap = function() {
+		var self = this;
+		if(this.position.x > app.cyber_fighter.WIDTH + 5) {
+			self.position.x = 0;
+		}
+		else if (this.position.x < -5)
+		{
+			self.position.x = app.cyber_fighter.WIDTH;
+		}
+		
+		if(this.position.y > app.cyber_fighter.HEIGHT + 5) {
+			self.position.y = 0;
+		}
+		else if (this.position.y < -5)
+		{
+			self.position.y = app.cyber_fighter.HEIGHT;
+		}
 	};
 	
 	return ship;
