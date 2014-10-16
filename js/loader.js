@@ -68,6 +68,7 @@ window.onload = function(){
 	{
 		console.log("images loaded called");
 		app.cyber_fighter.init(app.ship);
+		app.drawLib.init(app.cyber_fighter);
 	});
 	
 	//load the image files

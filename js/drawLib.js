@@ -28,6 +28,14 @@ var app = app || {};
 
 
 app.drawLib = {
+	WIDTH: undefined,
+	HEIGHT: undefined,
+	
+	init: function(cf)
+	{
+		this.WIDTH = cf.WIDTH;
+		this.HEIGHT = cf.HEIGHT;
+	},
 
 	
 	//clear
@@ -55,19 +63,18 @@ app.drawLib = {
 	},
 	
 	//Draw the interface
-	drawInterface: function(ctx, player1, player2, interfaceColor, infoColor) {
-		var WIDTH = app.cyber_fighter.WIDTH;
-		var HEIGHT = app.cyber_fighter.HEIGHT;
+	//custom made for cyber_fighters
+	drawPlayInterface: function(ctx, player1, player2, interfaceColor, infoColor) {
 		// Draws the "ui"
-		var interfacePos = new app.vector(0, HEIGHT - (HEIGHT/5)); 
-		var interfaceSize = new app.vector(WIDTH, (HEIGHT/5));
+		var interfacePos = new app.vector(0, this.HEIGHT - (this.HEIGHT/5)); 
+		var interfaceSize = new app.vector(this.WIDTH, (this.HEIGHT/5));
 
 		var padding = 125;
 		
 		
 		var infoBoxSize =  new app.vector(225, 75);
 		var p1InfoBoxPos =  new app.vector(padding, interfacePos.y + ((interfaceSize.y/2) - (infoBoxSize.y/2)));
-		var p2InfoBoxPos =  new app.vector(WIDTH - infoBoxSize.x - padding, interfacePos.y + ((interfaceSize.y/2) - (infoBoxSize.y/2)));
+		var p2InfoBoxPos =  new app.vector(this.WIDTH - infoBoxSize.x - padding, interfacePos.y + ((interfaceSize.y/2) - (infoBoxSize.y/2)));
 
 		
 		// Draw the interface box
@@ -81,23 +88,13 @@ app.drawLib = {
 		var healthHeight =  p1InfoBoxPos.y + (infoBoxSize.y/2);
 		
 		//drawText(ctx, string, font, fillColor, position)
-		this.drawText(ctx, "Health:", "15pt Arial", "white", new app.vector(p1InfoBoxPos.x + healthPadding* 2, healthHeight- healthPadding));
-		this.drawText(ctx, "Health:", "15pt Arial", "white", new app.vector(p2InfoBoxPos.x + healthPadding* 2, healthHeight- healthPadding));
+		this.drawText(ctx, "Health:", "16pt Play", "white", new app.vector(p1InfoBoxPos.x + healthPadding* 2, healthHeight- healthPadding));
+		this.drawText(ctx, "Health:", "16pt Play", "white", new app.vector(p2InfoBoxPos.x + healthPadding* 2, healthHeight- healthPadding));
 		
-		this.drawText(ctx, "Lives: ", "15pt Arial", "white", new app.vector(p1InfoBoxPos.x + healthPadding* 2, healthHeight+ healthPadding*2));
-		this.drawText(ctx, "Lives: ", "15pt Arial", "white", new app.vector(p2InfoBoxPos.x + healthPadding* 2, healthHeight+ healthPadding*2));
-		this.drawText(ctx, player1.lives, "15pt Arial", "white", new app.vector(p1InfoBoxPos.x + (healthPadding* 10) + 50, healthHeight+ healthPadding*2));
-		this.drawText(ctx, player2.lives, "15pt Arial", "white", new app.vector(p2InfoBoxPos.x + (healthPadding* 10) + 50, healthHeight+ healthPadding*2));
-	
-		
-		/*ctx.save();
-		ctx.font = ;
-		ctx.fillStyle = ;
-		
-		ctx.fillText("Health:", p1InfoBoxPos.x + healthPadding* 2, healthHeight- healthPadding/3);
-		ctx.fillText("Health:", p2InfoBoxPos.x + healthPadding* 2, healthHeight- healthPadding/3);
-		
-		ctx.restore();*/
+		this.drawText(ctx, "Lives: ", "16pt Play", "white", new app.vector(p1InfoBoxPos.x + healthPadding* 2, healthHeight+ healthPadding*2));
+		this.drawText(ctx, "Lives: ", "16pt Play", "white", new app.vector(p2InfoBoxPos.x + healthPadding* 2, healthHeight+ healthPadding*2));
+		this.drawText(ctx, player1.lives + 1, "16pt Play", "white", new app.vector(p1InfoBoxPos.x + (healthPadding* 10) + 50, healthHeight+ healthPadding*2));
+		this.drawText(ctx, player2.lives + 1, "16pt Play", "white", new app.vector(p2InfoBoxPos.x + (healthPadding* 10) + 50, healthHeight+ healthPadding*2));
 		
 		// Draws player 1 health to the screen
 		for(var i=0; i < player1.health; i++) {
@@ -107,6 +104,37 @@ app.drawLib = {
 		for(var i=0; i < player2.health; i++) {
 			this.drawRect(ctx, player2.color, new app.vector(p2InfoBoxPos.x + (infoBoxSize.x/2) + healthPadding*(i+1), healthHeight- healthPadding/2), new app.vector(healthPadding, 20), 0);
 		}
+	},
+	
+	//
+	drawGridBackground: function(ctx, color1, color2, position, size) {
+		//set the background gradient
+		
+		ctx.save();
+		var gradient = ctx.createLinearGradient(0,0,size.x, 0);
+		gradient.addColorStop(0,color1);
+		gradient.addColorStop(1,color2);
+		ctx.fillStyle = gradient;
+		ctx.fillRect(position.x, position.y ,size.x, size.y);
+		ctx.restore();
+		
+		//create black rectangles to fake a grid on the background
+		var spacing = 20;
+		ctx.save();
+		for(var i = 0; i < (4*this.HEIGHT/5)/ spacing; i++)
+		{
+			ctx.save();
+			for(var j = 0; j < this.WIDTH/spacing; j++)
+			{
+				ctx.fillStyle = "black";
+				ctx.fillRect(0,0,spacing-1,spacing-1);
+				ctx.translate(spacing,0);
+			}
+			ctx.restore();
+			ctx.translate(0,spacing);
+		}
+		ctx.restore();
+		
 	},
 	
 	
@@ -124,7 +152,7 @@ app.drawLib = {
 		ctx.restore();
 	},
 
-		//draws a stroke rectangle around where an object should be given it's position and size
+	//draws a stroke rectangle around where an object should be given it's position and size
 	debugRect: function(ctx, object)
 	{
 		ctx.save();
@@ -134,6 +162,7 @@ app.drawLib = {
 		ctx.restore();
 	},
 	
+	//custom made for cyber_fighters
 	drawText: function(ctx, string, font, fillColor, position)
 	{
 		ctx.save();
