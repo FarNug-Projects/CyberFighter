@@ -19,7 +19,6 @@ app.cyber_fighter = {
     HEIGHT: 600,
 	SHIP_WIDTH: 52,
 	SHIP_HEIGHT: 52,
-	//FIRE_RATE: 3,
 	
 	//properties
     canvas: undefined,
@@ -35,6 +34,9 @@ app.cyber_fighter = {
 	currentState: undefined,
 	thisFrame:0,
 	lastFrame:0,
+	
+	selectedP1Color: undefined,
+	selectedP2Color: undefined,
     
     // methods
 	init : function() {
@@ -48,10 +50,14 @@ app.cyber_fighter = {
 			this.gameState = {
 				mainMenu: 0,
 				play: 1,
-				custom: 2
+				custom: 2,
+				gameOver: 3,
 			}
 			
 			this.currentState = this.gameState.play;
+			
+			this.selectedP1Color = "purple";
+			this.selectedP2Color = "orange";
 			
 			/* Player 1 ship */
 			// Create and IMG object
@@ -61,7 +67,7 @@ app.cyber_fighter = {
 			image.src = this.app.IMAGES['design1'];
 			
 			//create the ship
-			this.player1 = new app.ship(image,this.WIDTH/4, this.HEIGHT/2.5, this.SHIP_WIDTH, this.SHIP_HEIGHT, 90, "red")
+			this.player1 = new app.ship(image,this.WIDTH/4, this.HEIGHT/2.5, this.SHIP_WIDTH, this.SHIP_HEIGHT, 90, this.selectedP1Color)
 			
 			/* Player 2 ship */
 			var image = new Image();
@@ -70,7 +76,7 @@ app.cyber_fighter = {
 			image.src = this.app.IMAGES['design1'];
 			
 			//create the ship
-			this.player2 = new app.ship(image,3*this.WIDTH/4, this.HEIGHT/2.5, this.SHIP_WIDTH, this.SHIP_HEIGHT, -90, "green")
+			this.player2 = new app.ship(image,3*this.WIDTH/4, this.HEIGHT/2.5, this.SHIP_WIDTH, this.SHIP_HEIGHT, -90, this.selectedP2Color)
 
 			this.update();
 	},
@@ -99,13 +105,24 @@ app.cyber_fighter = {
 			this.checkForCollisions();
 			
 			// Draw
-			this.drawSprites();
+			this.drawGame();
+			
+			//check for player death
+			if(this.player1.isDead == true || this.player2.isDead == true)
+			{
+				this.currentState = this.gameState.over;
+			}
+		}
+		else
+		{
+			this.drawMenu();
 		}
 	},
 	
-	drawSprites: function() {
-		//drawBackground(ctx, p1Color, p2Color, position, size)
-		this.drawLib.drawGridBackground(this.ctx, this.player2.color, this.player1.color, new app.vector(0, 0), new app.vector(this.WIDTH, this.HEIGHT));
+	//
+	drawGame: function() {
+		//drawGridBackground(ctx, p1Color, p2Color, position, size)
+		this.drawLib.drawGridBackground(this.ctx, new app.vector(0, 0), new app.vector(this.WIDTH, (4*this.HEIGHT/5)));
 		//this.drawLib.drawGridBackground(this.ctx, "green", "red", new app.vector(0, 0), new app.vector(this.WIDTH, this.HEIGHT));
 
 		// Draw the sprites
@@ -116,8 +133,11 @@ app.cyber_fighter = {
 		this.drawLib.drawPlayInterface(this.ctx, this.player1, this.player2, "gray", "black");
 	},
 	
-	moveSprites: function() {
-	
+	// menu drawing code
+	drawMenu: function()
+	{
+		//drawGridBackground(ctx, p1Color, p2Color, position, size)
+		this.drawLib.drawGridBackground(this.ctx, new app.vector(0, 0), new app.vector(this.WIDTH, this.HEIGHT));
 	},
 	
 	checkForCollisions: function() {
@@ -154,17 +174,6 @@ app.cyber_fighter = {
 			
 			});
 		}
-		
-		if(this.player2.isActive == true && this.player2.isActive == true)
-		{
-			if(self.collides(self.player1, self.player2))
-				{
-					//collision stuff
-					console.log("The players are dumb");
-					self.player1.shipHit();
-					self.player2.shipHit();
-				}
-		}
 	},
 	
 	collides: function(a,b) {
@@ -189,12 +198,11 @@ app.cyber_fighter = {
 		{
 			this.player1.rotate("right", this.dt);
 		}
-		if(this.app.keydown[this.app.KEYBOARD.KEY_W]== true)
+		if(this.app.keydown[this.app.KEYBOARD.KEY_W] == true)
 		{
-			//this.player1.move(this.dt);
 			this.player1.isAccelerating = true;
 		}
-		else if(this.app.keydown[this.app.KEYBOARD.KEY_W]== false)
+		else if(this.app.keydown[this.app.KEYBOARD.KEY_W] == false)
 		{
 			this.player1.isAccelerating = false;
 		}
@@ -214,9 +222,7 @@ app.cyber_fighter = {
 		}
 		if(this.app.keydown[this.app.KEYBOARD.KEY_I] == true)
 		{
-			//this.player2.move(this.dt);
 			this.player2.isAccelerating = true;
-			console.log("Player 2 is accelerating: " + this.player2.isAccelerating);
 		}
 		else if(this.app.keydown[this.app.KEYBOARD.KEY_I] == false)
 		{

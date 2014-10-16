@@ -84,6 +84,8 @@ app.drawLib = {
 		// Draw the player 2 info box
 		this.drawBackground(ctx, infoColor, p2InfoBoxPos, infoBoxSize);
 		
+		
+		//Draw health and lives text
 		var healthPadding = 10;
 		var healthHeight =  p1InfoBoxPos.y + (infoBoxSize.y/2);
 		
@@ -104,27 +106,35 @@ app.drawLib = {
 		for(var i=0; i < player2.health; i++) {
 			this.drawRect(ctx, player2.color, new app.vector(p2InfoBoxPos.x + (infoBoxSize.x/2) + healthPadding*(i+1), healthHeight- healthPadding/2), new app.vector(healthPadding, 20), 0);
 		}
+		
+		//draw the ship images
+		var shipSize = new app.vector(50,50);
+		var shipBackgroundSize = new app.vector(60,75);
+		var ship1Pos = new app.vector(p1InfoBoxPos.x - 50, p1InfoBoxPos.y + 10);
+		var ship2Pos = new app.vector(p2InfoBoxPos.x - 50, p1InfoBoxPos.y + 10);
+		
+		this.drawBackground(ctx, infoColor, new app.vector(ship1Pos.x-10,ship1Pos.y - shipBackgroundSize.y/8 -0.5), shipBackgroundSize);
+		this.drawBackground(ctx, infoColor, new app.vector(ship2Pos.x-10,ship2Pos.y - shipBackgroundSize.y/8 -0.5), shipBackgroundSize);
+		
+		this.drawImage(ctx, player1.image, player1.sourcePosition , player1.sourceSize, ship1Pos, shipSize, 90);
+		this.drawImage(ctx, player2.image, player2.sourcePosition, player2.sourceSize, ship2Pos, shipSize, 90);
 	},
 	
 	//
-	drawGridBackground: function(ctx, color1, color2, position, size) {
+	drawGridBackground: function(ctx, position, size) {
 		//set the background gradient
 		
 		ctx.save();
-		var gradient = ctx.createLinearGradient(0,0,size.x, 0);
-		gradient.addColorStop(0,color1);
-		gradient.addColorStop(1,color2);
-		ctx.fillStyle = gradient;
-		ctx.fillRect(position.x, position.y ,size.x, size.y);
-		ctx.restore();
+		
+		this.drawBackground(ctx, "#009194", new app.vector(0,0), new app.vector(this.WIDTH, this.HEIGHT));
 		
 		//create black rectangles to fake a grid on the background
-		var spacing = 20;
+		var spacing = 40;
 		ctx.save();
-		for(var i = 0; i < (4*this.HEIGHT/5)/ spacing; i++)
+		for(var i = 0; i < size.y/ spacing; i++)
 		{
 			ctx.save();
-			for(var j = 0; j < this.WIDTH/spacing; j++)
+			for(var j = 0; j < size.x/spacing; j++)
 			{
 				ctx.fillStyle = "black";
 				ctx.fillRect(0,0,spacing-1,spacing-1);

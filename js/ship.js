@@ -38,6 +38,7 @@ app.ship = function()
 		this.lives = 2;
 		this.isActive = true;
 		this.isHit = false;
+		this.isDead = false;
 		
 		//drawing variables
 		this.color = color;
@@ -163,7 +164,7 @@ app.ship = function()
 		
 		//respawn
 		var self = this;
-		if(this.health <= 0 && this.lives > 0) 
+		if(this.health <= 0) 
 		{
 			if(self.isActive)
 			{
@@ -256,7 +257,7 @@ app.ship = function()
 	p.respawn = function() {
 		var self = this;
 		
-		if(this.lives >0)
+		if(this.lives > 0)
 		{
 			self.position = self.spawnPosition;
 			self.acceleration = new app.vector(0,0);
@@ -269,7 +270,7 @@ app.ship = function()
 		}
 		else
 		{
-			//gameover code
+			self.isDead = true;
 		}
 	};
 	
