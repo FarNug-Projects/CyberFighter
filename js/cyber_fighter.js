@@ -130,7 +130,7 @@ app.cyber_fighter = {
 		this.player2.draw(this.dt, this.ctx);
 		
 		//drawInterface(ctx, interfaceColor, infoColor)
-		this.drawLib.drawPlayInterface(this.ctx, this.player1, this.player2, "gray", "black");
+		this.drawLib.drawPlayInterface(this.ctx, this.player1, this.player2, "#1F1F1F", "black");
 	},
 	
 	// menu drawing code
