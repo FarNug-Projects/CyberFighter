@@ -126,7 +126,7 @@ app.drawLib = {
 		
 		ctx.save();
 		
-		this.drawBackground(ctx, "#009194", new app.vector(0,0), new app.vector(this.WIDTH, this.HEIGHT));
+		this.drawBackground(ctx, "#008888", new app.vector(0,0), new app.vector(this.WIDTH, this.HEIGHT));
 		
 		//create black rectangles to fake a grid on the background
 		var spacing = 40;
@@ -161,7 +161,7 @@ app.drawLib = {
 		ctx.drawImage(img, sourcePos.x, sourcePos.y, sourceSize.x, sourceSize.y, -size.x/2, -size.y/2, size.x, size.y);
 		ctx.restore();
 	},
-
+	
 	//draws a stroke rectangle around where an object should be given it's position and size
 	debugRect: function(ctx, object)
 	{

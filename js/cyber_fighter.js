@@ -30,7 +30,7 @@ app.cyber_fighter = {
 	utils: undefined,
 	player1: undefined,
 	player2: undefined,
-	gameState:undefined,
+	gameState: undefined,
 	currentState: undefined,
 	thisFrame:0,
 	lastFrame:0,
@@ -110,7 +110,7 @@ app.cyber_fighter = {
 			//check for player death
 			if(this.player1.isDead == true || this.player2.isDead == true)
 			{
-				this.currentState = this.gameState.over;
+				this.currentState = this.gameState.gameOver;
 			}
 		}
 		else
@@ -138,6 +138,31 @@ app.cyber_fighter = {
 	{
 		//drawGridBackground(ctx, p1Color, p2Color, position, size)
 		this.drawLib.drawGridBackground(this.ctx, new app.vector(0, 0), new app.vector(this.WIDTH, this.HEIGHT));
+		switch(this.currentState) {
+			case(this.gameState.mainMenu):
+				// Draws the main menu
+				break;
+			case(this.gameState.custom):
+				// Draws the customization screen
+				break;
+			case(this.gameState.gameOver):
+				// Draws the game over screen
+				//drawText(ctx, string, font, fillColor, position)
+				this.ctx.save();
+				this.ctx.textAlign = "center";
+				this.drawLib.drawText(this.ctx, "GAME OVER", "40pt Play", "#008888",  new app.vector(this.WIDTH/2, this.HEIGHT/4));
+				if(this.player2.isDead) {
+					this.drawLib.drawText(this.ctx, "Player One Wins!", "40pt Play", this.selectedP1Color,  new app.vector(this.WIDTH/2, 2*(this.HEIGHT/5)));
+				}
+				if(this.player1.isDead) {
+					this.drawLib.drawText(this.ctx, "Player Two Wins!", "40pt Play", this.selectedP2Color,  new app.vector(this.WIDTH/2, 2*(this.HEIGHT/5)));
+				}
+				if(this.player1.isDead && this.player2.isDead) {
+					this.drawLib.drawText(this.ctx, "Draw", "40pt Play", "#008888",  new app.vector(this.WIDTH/2, 2*(this.HEIGHT/4)));
+				}
+				this.ctx.restore();
+				break;
+		}
 	},
 	
 	checkForCollisions: function() {
