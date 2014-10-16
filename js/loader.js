@@ -43,6 +43,13 @@ app.IMAGES =
 //this works because js has "sparse arrays" - not every language does
 app.keydown = [];
 
+app.mouse = 
+{
+	x:0,
+	y:0,
+	clicked:false,
+};
+
 window.onload = function(){
 	console.log("window.onload called");
 	app.cyber_fighter.app = app;
@@ -60,6 +67,15 @@ window.onload = function(){
 		//console.log("keydown=" e.keyCode);
 		app.keydown[e.keyCode] = false;
 	});
+	
+	//mouse events
+	window.addEventListener("mousemove", function(e){
+        app.mouse.x = e.pageX - e.target.offsetLeft;
+        app.mouse.y = e.pageY - e.target.offsetTop;
+	});
+	
+	window.addEventListener("mousedown", function(e){app.mouse.clicked = true;});
+	window.addEventListener("mouseup", function(e){app.mouse.clicked = false;});
 	
 	//preload images and sound
 	app.queue = new createjs.LoadQueue(false);

@@ -37,6 +37,8 @@ app.cyber_fighter = {
 	
 	selectedP1Color: undefined,
 	selectedP2Color: undefined,
+	
+	buttons: undefined,
     
     // methods
 	init : function() {
@@ -52,12 +54,20 @@ app.cyber_fighter = {
 				play: 1,
 				custom: 2,
 				gameOver: 3,
+				credit: 4
 			}
 			
-			this.currentState = this.gameState.play;
+			this.currentState = this.gameState.mainMenu;
 			
 			this.selectedP1Color = "purple";
 			this.selectedP2Color = "orange";
+			
+			this.buttons = {
+				//button(text, font, fontColor, image,x,y,width,height) 
+				"menuPlayButton" : new app.button("FIGHT", "32pt Play", "white", undefined, this.WIDTH/2, 2*this.HEIGHT/5, 225, 75), 
+				"menuCustomButton" : new app.button("CUSTOMIZE", "22pt Play", "white", undefined, this.WIDTH/2, 3*this.HEIGHT/5, 225, 75),
+				"menuCreditButton" : new app.button("CREDITS", "32pt Play", "white", undefined, this.WIDTH/2, 4*this.HEIGHT/5, 225, 75),
+			}
 			
 			/* Player 1 ship */
 			// Create and IMG object
@@ -91,6 +101,13 @@ app.cyber_fighter = {
 		this.dt = (this.thisFrame - this.lastFrame)/1000;
 		this.lastFrame = Date.now();
 		
+		if(this.currentState == this.gameState.mainMenu)
+		{
+			if (this.buttonClicked("menuPlayButton")) {
+				console.log("Clicked");
+				this.currentState = this.gameState.play;
+			}
+		}
 		if(this.currentState == this.gameState.play)
 		{
 			//handle input
@@ -140,7 +157,9 @@ app.cyber_fighter = {
 		this.drawLib.drawGridBackground(this.ctx, new app.vector(0, 0), new app.vector(this.WIDTH, this.HEIGHT));
 		switch(this.currentState) {
 			case(this.gameState.mainMenu):
-				// Draws the main menu
+				this.buttons["menuPlayButton"].draw(this.ctx, app.mouse);
+				this.buttons["menuCustomButton"].draw(this.ctx, app.mouse);
+				this.buttons["menuCreditButton"].draw(this.ctx, app.mouse);
 				break;
 			case(this.gameState.custom):
 				// Draws the customization screen
@@ -257,5 +276,20 @@ app.cyber_fighter = {
 		{
 			this.player2.shoot();
 		}
+	},
+	
+	//get the mouse position on the screen
+	getMouse: function(e){
+		var mouse = {}
+		mouse.x = e.pageX - e.target.offsetLeft;
+		mouse.y = e.pageY - e.target.offsetTop;
+		return mouse;
+	},
+	
+	//Test to see if a certain button is clicked or not
+	/* Adapted from Friendly Fire */
+	buttonClicked : function(buttonTitle)
+	{
+		return this.buttons[buttonTitle].isClicked();
 	}
 }

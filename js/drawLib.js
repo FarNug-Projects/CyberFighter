@@ -120,7 +120,6 @@ app.drawLib = {
 		this.drawImage(ctx, player2.image, player2.sourcePosition, player2.sourceSize, ship2Pos, shipSize, 90);
 	},
 	
-	//
 	drawGridBackground: function(ctx, position, size) {
 		//set the background gradient
 		
