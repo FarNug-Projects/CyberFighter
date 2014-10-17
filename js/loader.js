@@ -12,6 +12,8 @@ var app = app || {};
 
 //CONSTANTS
 app.KEYBOARD = {
+	"KEY_ESC": 27,
+
 	"KEY_LEFT": 37,
 	"KEY_UP": 38,
 	"KEY_RIGHT": 39,

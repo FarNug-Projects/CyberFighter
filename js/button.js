@@ -48,7 +48,7 @@ app.button = function()
 		
 		//set the image and default "backup" color
 		this.image = image;
-		this.color = "red";
+		this.color = "#454545";
 		this.clicked = false;
 		
 	};//constructor
@@ -60,6 +60,11 @@ app.button = function()
 	p.draw = function(ctx,mouse) 
 	{
 		ctx.save();
+		
+		if(this.clicked)
+		{
+			this.scale = 1.0;
+		}
 		
 		//drawing origin is top left corner
 		//use this to center image on (x,y)
@@ -90,6 +95,14 @@ app.button = function()
 	
 	//accessor/get for clicked state
 	p.isClicked = function() {return this.clicked;};
+	
+	//reset the button's click state
+	p.clickResolution = function()
+	{
+		//createjs.Sound.play("buttonClick");
+		this.scale = 1.0;
+		this.clicked = false;
+	}
 	
 	// private functions/methods
 	

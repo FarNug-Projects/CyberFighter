@@ -29,13 +29,17 @@ app.Bullet = function() {
 		
 		if(checkBounds(this.position.x, this.position.y) == false) {
 			this.active = false;
-			//console.log("A Bullet has been deactivated");
 		}
 	};
 	
 	p.draw = function(ctx) {
+		ctx.save();
 		ctx.fillStyle = this.color;
+		ctx.strokeStyle = "white";
+		ctx.lineWidth = 0.75;
 		ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y);
+		ctx.strokeRect(this.position.x, this.position.y, this.size.x, this.size.y);
+		ctx.restore();
 	};
 	
 	// Private method

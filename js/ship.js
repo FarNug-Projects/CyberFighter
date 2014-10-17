@@ -26,7 +26,7 @@ app.ship = function()
 		this.accelerationLimit = 0.1;
 		this.acceleration = new app.vector(0,0);
 		this.velocity = new app.vector(0,0);
-		this.maxSpeed = 2.5;
+		this.maxSpeed = 5;
 		this.friction = .99;
 		
 		this.rotationAsRadians = (this.angle - 90) * (Math.PI/180);
@@ -35,7 +35,8 @@ app.ship = function()
 		//health related variables
 		this.health = 10;
 		this.maxHealth = 10;
-		this.lives = 2;
+		this.lives = 0;
+		this.startingLives = this.lives;
 		this.isActive = true;
 		this.isHit = false;
 		this.isDead = false;
@@ -136,8 +137,6 @@ app.ship = function()
 			//app.drawLib.debugRect(ctx, this);
 
 			ctx.restore();
-			
-			this.update(dt);
 		}
 	};
 	
@@ -238,7 +237,7 @@ app.ship = function()
 			
 			var sumVec = this.position.sum(angleVec);
 
-			this.bullets.push(new this.app.Bullet(sumVec.x, sumVec.y, 200, this.angle, this.color));
+			this.bullets.push(new this.app.Bullet(sumVec.x, sumVec.y, 400, this.angle, this.color));
 		}
 	};
 	
@@ -281,7 +280,7 @@ app.ship = function()
 		this.forward.y = Math.sin(this.rotationAsRadians);
 	};
 	
-	// Private method
+	//wrap around the screen
 	p.wrap = function() {
 		var self = this;
 		
@@ -303,6 +302,21 @@ app.ship = function()
 		{
 			self.position.y = (screenHeight - screenHeight/5) + 5;
 		}
+	};
+	
+	//reset variables on the ship for playing again
+	p.reset = function()
+	{
+		this.position = this.spawnPosition;
+		this.acceleration = new app.vector(0,0);
+		this.velocity = new app.vector(0,0);
+		this.bullets = [];
+		this.angle = this.spawnAngle;
+		this.health = this.maxHealth;
+		this.lives = this.startingLives;
+		this.isActive = true;
+		this.isHit = false;
+		this.isDead = false;
 	};
 	
 	return ship;
