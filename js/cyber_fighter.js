@@ -28,6 +28,7 @@ app.cyber_fighter = {
 	dt: 1/60.0, 
 	app: undefined,
 	utils: undefined,
+	emitter: undefined,
 	player1: undefined,
 	player2: undefined,
 	gameState: undefined,

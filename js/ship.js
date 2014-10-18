@@ -67,6 +67,7 @@ app.ship = function()
 		var col1= 1;
 		var col2= 34;
 		var col3= 67;
+	
 		
 		//figure out which part of the image based off of color
 		switch(color)
@@ -97,6 +98,13 @@ app.ship = function()
 				break;
 		}
 		this.sourceSize = new app.vector(32, 32);
+		
+		// Exhaust
+		this.exhaust = new app.emitter();
+		this.exhaust.numParticles = 100;
+		this.exhaust.red = 255;
+		this.exhaust.green = 150;
+		this.exhaust.createParticles(this.emitterPoint());
 		
 	}; //constructor
 	
@@ -137,6 +145,9 @@ app.ship = function()
 			//app.drawLib.debugRect(ctx, this);
 
 			ctx.restore();
+			
+			// Draws the exhaust
+			this.exhaust.draw(ctx, this.color);
 		}
 	};
 	
@@ -160,6 +171,9 @@ app.ship = function()
 			this.bullets[i].update(dt);
 		}
 		this.bullets = this.bullets.filter(function (bullet){return bullet.active;});
+		
+		// Exhaust
+		this.exhaust.update(this.emitterPoint());
 		
 		//respawn
 		var self = this;
@@ -280,6 +294,7 @@ app.ship = function()
 		this.forward.y = Math.sin(this.rotationAsRadians);
 	};
 	
+	
 	//wrap around the screen
 	p.wrap = function() {
 		var self = this;
@@ -317,6 +332,17 @@ app.ship = function()
 		this.isActive = true;
 		this.isHit = false;
 		this.isDead = false;
+	};
+	
+	p.emitterPoint = function() {
+		/*return { 
+			x: this.position.x, 
+			y: this.position.y + this.size.y/2 + 2,
+		};*/
+		var angleVec = new app.vector(this.forward.x * (this.size.x/2), this.forward.y * (this.size.y/2));	
+		var differenceVec = this.position.difference(angleVec);
+		
+		return {x: differenceVec.x, y: differenceVec.y};
 	};
 	
 	return ship;
