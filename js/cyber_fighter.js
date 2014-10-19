@@ -42,6 +42,7 @@ app.cyber_fighter = {
 	buttons: undefined,
 	
 	escapePressed: undefined,
+	theme: undefined,
     
     // methods
 	init : function() {
@@ -104,6 +105,10 @@ app.cyber_fighter = {
 			this.escapePressed = false;
 			
 			this.update();
+			
+			this.theme = new Audio('audio/theme3.mp3');
+			this.theme.loop = true;
+			this.theme.play();
 	},
 	
 	update: function() {
