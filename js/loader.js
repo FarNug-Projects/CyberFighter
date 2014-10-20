@@ -6,8 +6,7 @@ the game will be properties of app.
 */
 "use strict";
 
-// if app exists use the existing copy
-// else create a new object literal
+// If app exists use the existing copy, otherwise create a new object literal.
 var app = app || {};
 
 //CONSTANTS
@@ -34,11 +33,12 @@ app.KEYBOARD = {
 	"KEY_E": 69
 };
 
+// Loading images.
 app.IMAGES = 
 {
 	fighter: "images/fighter.png",
 	instructions: "images/instructions.png",
-	};
+};
 
 //app.keydown array to keep track of which keys are down
 //this is called a "key daemon"
@@ -70,7 +70,7 @@ window.onload = function(){
 		app.keydown[e.keyCode] = false;
 	});
 	
-	//mouse events
+	//Mouse events
 	window.addEventListener("mousemove", function(e){
         app.mouse.x = e.pageX - e.target.offsetLeft;
         app.mouse.y = e.pageY - e.target.offsetTop;
@@ -79,7 +79,7 @@ window.onload = function(){
 	window.addEventListener("mousedown", function(e){app.mouse.clicked = true;});
 	window.addEventListener("mouseup", function(e){app.mouse.clicked = false;});
 	
-	//preload images and sound
+	//Preloads images and sounds
 	app.queue = new createjs.LoadQueue(false);
 	app.queue.installPlugin(createjs.Sound);
 	app.queue.on("complete", function()
@@ -88,7 +88,7 @@ window.onload = function(){
 		app.DrawLib.init(app.Cyber_Fighter);
 	});
 	
-	//load the image files
+	// Loads the image files
 	app.queue.loadManifest(
 	[
 		{id: "fighter", src:"images/fighter.png"},

@@ -71,15 +71,15 @@ app.Ship = function()
 		this.exhaust.createParticles(this.emitterPoint());
 		
 		// Sound variables
-		this.reviveSound = new Audio('audio/revive.mp3');
-		this.engineSound = new Audio('audio/engine.mp3');
+		this.reviveSound = new Audio('audio/revive.mp3');  // Source: soundbible.com
+		this.engineSound = new Audio('audio/engine.mp3');  // Source: soundbible.com
 		this.engineSound.volume = 1.0;
-		this.laserSound = new Audio('audio/laser.mp3');
+		this.laserSound = new Audio('audio/laser.mp3');  // Source: soundbible.com
 		this.laserSound.volume = 0.2;
-		this.hitSound = new Audio('audio/hit.mp3');
+		this.hitSound = new Audio('audio/hit.mp3');  // Source: soundbible.com
 		this.hitSound.volume = 0.2;
 	
-	}; //constructor
+	};
 	
 	Ship.app = undefined;
 	
@@ -117,8 +117,6 @@ app.Ship = function()
 					self.isHit = !self.isHit;
 				}
 			}
-			
-			//app.DrawLib.debugRect(ctx, this);
 
 			ctx.restore();			
 		}

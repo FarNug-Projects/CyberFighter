@@ -52,7 +52,7 @@ app.Button = function()
 		//button click sound
 		this.clickedSound = new Audio('audio/button-09.mp3'); // Source: soundjay.com
 		
-	};//constructor
+	};
 		
 	// Prototype for making functions/methods available outside of the class
 	var p = Button.prototype;
@@ -79,7 +79,7 @@ app.Button = function()
 			
 		} else{
 			ctx.drawImage(this.image,this.position.x - halfW, this.position.y - halfH, this.size.x * this.scale, this.size.y * this.scale);
-		}//if image
+		}
 		
 		ctx.restore();
 		
@@ -94,7 +94,7 @@ app.Button = function()
 		
 		//handle any input
 		update(mouse,this);
-	};//draw
+	};
 	
 	//accessor/get for clicked state
 	p.isClicked = function() {return this.clicked;};
@@ -124,14 +124,14 @@ app.Button = function()
 		else
 			return false;
 			
-	};//contains mouse
+	};
 	
 	//Button update function
 	function update(mouse,that) 
 	{
 		//handle mouse input
 		handleMouse(containsMouse(mouse,that),that,mouse);
-	};//update
+	};
 	  
 	//This handles all input to be gathered from the mouse
 	function handleMouse(hovering,that,mouse)
@@ -148,8 +148,7 @@ app.Button = function()
 			that.clicked = false;
 		}
 			
-	};//hover
+	};
 	
 	return Button;
-	
-}();//end of Button.js
+}();

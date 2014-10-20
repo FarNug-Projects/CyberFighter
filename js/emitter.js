@@ -16,13 +16,11 @@ app.Emitter=function(){
 		this.expansionRate = 0.5;
 		this.decayRate = 5;
 		this.lifetime = 100;
-		
-		// private
 		this.particles = undefined;
 	};
 	
 	// "public" methods
-	var p=Emitter.prototype;
+	var p = Emitter.prototype;
 	
 	p.createParticles = function(emitterPoint){
 		this.particles = [];
@@ -35,7 +33,7 @@ app.Emitter=function(){
 		}
 	};
 
-	
+	// Draws the particles in the array to the screen
 	p.draw = function(ctx, color) {
 		for( var i = 0; i < this.particles.length; i++) {
 			var p = this.particles[i];
@@ -79,7 +77,6 @@ app.Emitter=function(){
 			
 			// Emission is made up of circles
 			ctx.strokeStyle = "rgba(" + red + "," + green + "," + blue + "," + alpha + ")";
-			//ctx.fillStyle = color;
 			ctx.beginPath();
 			ctx.arc(p.x, p.y, p.r, Math.PI * 2, false);
 			ctx.closePath();
@@ -87,6 +84,7 @@ app.Emitter=function(){
 		}
 	};
 	
+	// Updates the particle stream, makes them decay and disappear
 	p.update = function(emitterPoint) {
 		for(var i=0; i < this.particles.length; i++) {
 			var p = this.particles[i];
@@ -102,7 +100,7 @@ app.Emitter=function(){
 		}
 	};
 			
-	// "private" method
+	// "private" method, particle creator
 	function initParticle(obj, p, emitterPoint){
 		// give it a random age when first created
 		p.age = app.utils.getRandomInt(0,obj.lifetime);

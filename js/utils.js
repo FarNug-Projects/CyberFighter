@@ -1,5 +1,3 @@
-// utils.js
-
 "use strict";
 var app = app || {};
 
