@@ -48,7 +48,9 @@ app.Cyber_Fighter = {
 	theme: undefined,
 	laser: undefined,
 	hit: undefined,
+	engine: undefined,
 	
+	// Images
 	instructions: undefined,
 	
     

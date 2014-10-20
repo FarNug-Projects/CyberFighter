@@ -72,6 +72,8 @@ app.Ship = function()
 		
 		// Sound variables
 		this.reviveSound = new Audio('audio/revive.mp3');
+		this.engineSound = new Audio('audio/engine.mp3');
+		this.engineSound.volume = 1.0;
 		this.laserSound = new Audio('audio/laser.mp3');
 		this.laserSound.volume = 0.2;
 		this.hitSound = new Audio('audio/hit.mp3');
@@ -194,6 +196,8 @@ app.Ship = function()
 		var self = this;
 		if(this.isAccelerating)
 		{
+			this.engineSound.play();
+			this.engineSound.loop = true;
 			this.acceleration = new app.Vector(forwardAccel.x, forwardAccel.y);
 			this.acceleration.limit(this.accelerationLimit);
 			
@@ -201,6 +205,7 @@ app.Ship = function()
 			this.velocity.limit(this.maxSpeed);
 		}
 		
+		this.engineSound.loop = false;
 		//multiply the velocity by friction to slow
 		this.velocity = this.velocity.mult(this.friction);
 		
