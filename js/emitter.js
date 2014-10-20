@@ -1,9 +1,9 @@
 "use strict";
 var app = app || {};
 
-app.emitter=function(){
+app.Emitter=function(){
 
-	function emitter(){
+	function Emitter(){
 		// public
 		this.numParticles = 50;
 		this.xRange = 4;
@@ -27,7 +27,7 @@ app.emitter=function(){
 	};
 	
 	// "public" methods
-	var p=emitter.prototype;
+	var p=Emitter.prototype;
 	
 	p.createParticles = function(emitterPoint){
 		this.particles = [];
@@ -38,8 +38,6 @@ app.emitter=function(){
 			var p = {};
 			this.particles.push(initParticle(this, p, emitterPoint));
 		}
-		// log the particles
-		//console.log(this.particles );
 	};
 
 	
@@ -125,5 +123,5 @@ app.emitter=function(){
 		return p;
 	};
 	
-	return emitter;
+	return Emitter;
 }();

@@ -28,17 +28,17 @@
 var app = app || {};
 
 // This is the "IIFE"/Class for the Button
-app.button = function()
+app.Button = function()
 {
 
 	//Button constructor
-	function button(text, font, fontColor, image,x,y,width,height) 
+	function Button(text, font, fontColor, image,x,y,width,height) 
 	{
 		// Instance variables of Button
 		/*this.x = x;
 		this.y = y;*/
-		this.position = new app.vector(x, y);
-		this.size = new app.vector(width, height);
+		this.position = new app.Vector(x, y);
+		this.size = new app.Vector(width, height);
 		this.scale = 1;
 		
 		//store the text to be drawn on the button
@@ -51,10 +51,13 @@ app.button = function()
 		this.color = "#454545";
 		this.clicked = false;
 		
+		//button click sound
+		this.clickedSound = new Audio('audio/button-09.mp3'); // Source: soundjay.com
+		
 	};//constructor
 		
 	// Prototype for making functions/methods available outside of the class
-	var p = button.prototype;
+	var p = Button.prototype;
 	
 	//Button Draw Method
 	p.draw = function(ctx,mouse) 
@@ -86,7 +89,7 @@ app.button = function()
 		ctx.textAlign = "center";
 		ctx.textBaseline = "middle";
 		//drawText(ctx, string, font, fillColor, position)
-		app.drawLib.drawText(ctx, this.text, this.font, this.fontColor, this.position);
+		app.DrawLib.drawText(ctx, this.text, this.font, this.fontColor, this.position);
 		ctx.restore();
 		
 		//handle any input
@@ -99,7 +102,7 @@ app.button = function()
 	//reset the button's click state
 	p.clickResolution = function()
 	{
-		//createjs.Sound.play("buttonClick");
+		this.clickedSound.play();
 		this.scale = 1.0;
 		this.clicked = false;
 	}
@@ -148,6 +151,6 @@ app.button = function()
 			
 	};//hover
 	
-	return button;
+	return Button;
 	
 }();//end of Button.js

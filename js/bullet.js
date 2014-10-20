@@ -7,14 +7,14 @@ app.Bullet = function() {
 		// ivars
 		this.active = true;
 		this.color = color;
-		this.position = new app.vector(x,y);
-		this.size = new app.vector(5, 5);
+		this.position = new app.Vector(x,y);
+		this.size = new app.Vector(5, 5);
 		this.speed = speed;
 		this.angle = angle;
 		
 		//screen size
-		this.screenWidth = app.cyber_fighter.WIDTH;
-		this.screenHeight = app.cyber_fighter.HEIGHT;
+		this.screenWidth = app.Cyber_Fighter.WIDTH;
+		this.screenHeight = app.Cyber_Fighter.HEIGHT;
 	}
 	
 	var p = Bullet.prototype;
@@ -44,10 +44,10 @@ app.Bullet = function() {
 	
 	// Private method
 	function checkBounds(x, y) {
-		if(x > app.cyber_fighter.WIDTH || x < 0) {
+		if(x > app.Cyber_Fighter.WIDTH || x < 0) {
 			return false;
 		}
-		if(y > app.cyber_fighter.HEIGHT || y < 0) {
+		if(y > app.Cyber_Fighter.HEIGHT || y < 0) {
 			return false;
 		}
 		return true;

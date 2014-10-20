@@ -27,7 +27,7 @@
 var app = app || {};
 
 
-app.drawLib = {
+app.DrawLib = {
 	WIDTH: undefined,
 	HEIGHT: undefined,
 	
@@ -80,7 +80,7 @@ app.drawLib = {
 		
 		ctx.save();
 		
-		this.drawBackground(ctx, "#008888", new app.vector(0,0), new app.vector(this.WIDTH, this.HEIGHT));
+		this.drawBackground(ctx, "#008888", new app.Vector(0,0), new app.Vector(this.WIDTH, this.HEIGHT));
 		
 		//create black rectangles to fake a grid on the background
 		var spacing = 40;

@@ -54,20 +54,19 @@ app.mouse =
 };
 
 window.onload = function(){
-	console.log("window.onload called");
-	app.cyber_fighter.app = app;
-	app.cyber_fighter.drawLib = app.drawLib;
-	app.ship.prototype.app = app;
-	app.cyber_fighter.utils = app.utils;
+	app.Cyber_Fighter.app = app;
+	app.Cyber_Fighter.DrawLib = app.DrawLib;
+	app.Cyber_Fighter.Interface = app.Interface;
+	app.Interface.DrawLib = app.DrawLib;
+	app.Ship.prototype.app = app;
+	app.Cyber_Fighter.utils = app.utils;
 	
 	window.addEventListener("keydown",function(e)
 	{
-		//console.log("keydown=" e.keyCode);
 		app.keydown[e.keyCode] = true;
 	});
 	window.addEventListener("keyup",function(e)
 	{
-		//console.log("keydown=" e.keyCode);
 		app.keydown[e.keyCode] = false;
 	});
 	
@@ -85,15 +84,13 @@ window.onload = function(){
 	app.queue.installPlugin(createjs.Sound);
 	app.queue.on("complete", function()
 	{
-		console.log("images loaded called");
-		app.cyber_fighter.init(app.ship);
-		app.drawLib.init(app.cyber_fighter);
+		app.Cyber_Fighter.init(app.Ship);
+		app.DrawLib.init(app.Cyber_Fighter);
 	});
 	
 	//load the image files
 	app.queue.loadManifest(
 	[
 		{id: "design1", src:"images/testfighter.png"},
-		//{id: "enemyImage", src:"images/Drone1.png"},
 	]);
 }

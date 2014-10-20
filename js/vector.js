@@ -30,16 +30,16 @@
 var app = app || {};
 
 // This is the "IIFE"/Class for the Vector
-app.vector = function()
+app.Vector = function()
 {
 	//constructor for the vector class
-	function vector(x,y)
+	function Vector(x,y)
 	{
 		this.x = x;
 		this.y = y;
 	};
 	
-	var p = vector.prototype;
+	var p = Vector.prototype;
 	
 	//Vector magnitude function, determines and returns the length of the vector
 	p.magnitude = function()
@@ -63,7 +63,7 @@ app.vector = function()
 	//returns the resulting vector
 	p.sum = function(vec)
 	{
-		var output = new app.vector(this.x + vec.x, this.y + vec.y);
+		var output = new app.Vector(this.x + vec.x, this.y + vec.y);
 		return output;
 	};
 	
@@ -71,7 +71,7 @@ app.vector = function()
 	//returns the resulting vector
 	p.difference = function(vec)
 	{
-		var output = new app.vector(this.x - vec.x, this.y - vec.y);
+		var output = new app.Vector(this.x - vec.x, this.y - vec.y);
 		return output;
 	};
 	
@@ -96,7 +96,7 @@ app.vector = function()
 	//multiply the vector by a scalar
 	p.mult = function(scalar)
 	{
-		var output = new app.vector(this.x *= scalar, this.y *= scalar);
+		var output = new app.Vector(this.x *= scalar, this.y *= scalar);
 		return output;
 	};
 	
@@ -106,5 +106,5 @@ app.vector = function()
 		return Math.atan2(this.y,this.x);
 	};
 	
-	return vector;
+	return Vector;
 }();
