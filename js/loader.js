@@ -36,8 +36,8 @@ app.KEYBOARD = {
 
 app.IMAGES = 
 {
-	design1: "images/testfighter.png",
-	//enemyImage: "images/Drone1.png"
+	fighter: "images/fighter.png",
+	instructions: "images/instructions.png",
 	};
 
 //app.keydown array to keep track of which keys are down
@@ -91,6 +91,7 @@ window.onload = function(){
 	//load the image files
 	app.queue.loadManifest(
 	[
-		{id: "design1", src:"images/testfighter.png"},
+		{id: "fighter", src:"images/fighter.png"},
+		{id: "instructions", src: "images/instructions.png"},
 	]);
 }

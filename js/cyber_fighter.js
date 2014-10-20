@@ -49,6 +49,8 @@ app.Cyber_Fighter = {
 	laser: undefined,
 	hit: undefined,
 	
+	instructions: undefined,
+	
     
     // methods
 	init : function() {
@@ -97,7 +99,7 @@ app.Cyber_Fighter = {
 			var image = new Image();
 			
 			// Get the ship PNG
-			image.src = this.app.IMAGES['design1'];
+			image.src = this.app.IMAGES['fighter'];
 			
 			//create the ship
 			this.player1 = new app.Ship(image,this.WIDTH/4, this.HEIGHT/2.5, this.SHIP_WIDTH, this.SHIP_HEIGHT, 90, this.Interface.colorArray[this.Interface.p1ColorIndex])
@@ -106,11 +108,16 @@ app.Cyber_Fighter = {
 			var image = new Image();
 			
 			// Get the ship PNG
-			image.src = this.app.IMAGES['design1'];
+			image.src = this.app.IMAGES['fighter'];
 			
 			//create the ship
 			this.player2 = new app.Ship(image,3*this.WIDTH/4, this.HEIGHT/2.5, this.SHIP_WIDTH, this.SHIP_HEIGHT, -90, this.Interface.colorArray[this.Interface.p2ColorIndex])
 
+			// Instructions image
+			this.instructions = new Image();
+			this.instructions.src = this.app.IMAGES['instructions'];
+			
+			
 			//pass the ships to the interface
 			this.Interface.player1= this.player1;
 			this.Interface.player2= this.player2;
@@ -161,7 +168,7 @@ app.Cyber_Fighter = {
 				this.Interface.updatePause(this.dt);
 				break;
 			case(this.gameState.control): //controls screen
-				this.Interface.drawControls(this.ctx);
+				this.Interface.drawControls(this.ctx, this.instructions);
 				this.Interface.updateControls(this.dt);
 				break;
 			case(this.gameState.gameOver)://gameover screen

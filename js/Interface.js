@@ -28,7 +28,7 @@ app.Interface = {
 	p2ColorIndex: 4,
 	previousP1Index: 0,
 	previousP2Index: 0,
-	
+	//instructions: undefined,
 
 	init : function(cyberFighter) 
 	{
@@ -89,6 +89,13 @@ app.Interface = {
 		app.Interface.buttons["menuPlayButton"].draw(ctx, app.mouse);
 		this.buttons["menuCustomButton"].draw(ctx, app.mouse);
 		
+		// Draw logo
+		ctx.save();
+		ctx.textAlign = "center";
+		this.DrawLib.drawText(ctx, "cyber_fighters.exe", "bold 26pt Play", "#008888",  new app.Vector(this.WIDTH/2, this.HEIGHT/4));
+		ctx.restore();
+		
+		
 		ctx.save();
 		ctx.textAlign = "center";
 		this.DrawLib.drawText(ctx, "Ryan Farrell & Brian Nugent 2014", "12pt Play", "white",  new app.Vector(this.WIDTH/2, this.HEIGHT - 50));
@@ -147,10 +154,13 @@ app.Interface = {
 		ctx.restore();
 	},
 	
-	drawControls: function(ctx) //draw the controls screen
+	drawControls: function(ctx, instructions) //draw the controls screen
 	{
 		//drawText(ctx, string, font, fillColor, position)
 		this.buttons["controlPlayButton"].draw(ctx, app.mouse);
+		
+		
+		this.DrawLib.drawImage(ctx, instructions, new app.Vector(0, 0), new app.Vector(600, 500), new app.Vector((this.WIDTH-600)/2, 8), new app.Vector(600, 500), 0);
 	},
 	
 	updateControls: function(dt) //update the controls screen
