@@ -63,12 +63,11 @@ app.cyber_fighter = {
 				play: 1,
 				custom: 2,
 				gameOver: 3,
-				credit: 4,
 				pause: 5,
 				controls: 6
 			}
 			
-			this.currentState = this.gameState.custom;
+			this.currentState = this.gameState.mainMenu;
 			
 			this.colorArray = ["red", "orange", "yellow", "green", "blue", "purple"];
 			//this.p1ColorIndex = 0;
@@ -80,10 +79,8 @@ app.cyber_fighter = {
 				//button(text, font, fontColor, image,x,y,width,height) 
 				"menuPlayButton" : new app.button("FIGHT", "24pt Play", "white", undefined, this.WIDTH/2, this.HEIGHT/2, 175, 50), 
 				"menuCustomButton" : new app.button("CUSTOMIZE", "22pt Play", "white", undefined, this.WIDTH/2, this.HEIGHT/2 + 75, 175, 50),
-				"menuCreditButton" : new app.button("CREDITS", "24pt Play", "white", undefined, this.WIDTH/2, this.HEIGHT/2 + 150, 175, 50),
 				"overMenuButton" : new app.button("MENU", "24pt Play", "white", undefined, this.WIDTH/2, (this.HEIGHT /2) + 130, 175, 50),
 				"overPlayButton" : new app.button("REMATCH", "24pt Play", "white", undefined, this.WIDTH/2, (this.HEIGHT /2) + 60, 175, 50),
-				"creditMenuButton" : new app.button("MENU", "24pt Play", "white", undefined, this.WIDTH/9 + 10, this.HEIGHT/10, 175, 50),
 				"customMenuButton" : new app.button("MENU", "24pt Play", "white", undefined, this.WIDTH/9 + 10, this.HEIGHT/10, 175, 50),
 				"pausePlayButton" : new app.button("RESUME", "24pt Play", "white", undefined, this.WIDTH/2, (this.HEIGHT /2) - 35, 175, 50), 
 				"pauseMenuButton" : new app.button("QUIT", "24pt Play", "white", undefined, this.WIDTH/2, (this.HEIGHT /2) + 35, 175, 50),
@@ -160,25 +157,6 @@ app.cyber_fighter = {
 				{
 					this.currentState = this.gameState.custom;
 					this.buttons["menuCustomButton"].clickResolution();
-					this.buttonClickDelay = 0;
-				}
-				if (this.buttonClicked("menuCreditButton")) 
-				{
-					this.currentState = this.gameState.custom;
-					this.buttons["menuCreditButton"].clickResolution();
-					this.buttonClickDelay = 0;
-				}
-			}
-		}
-		if(this.currentState == this.gameState.credit)
-		{
-			this.buttonClickDelay += this.dt;
-			
-			if(this.buttonClickDelay >= 0.5)
-			{
-				if (this.buttonClicked("creditMenuButton")) {
-					this.currentState = this.gameState.mainMenu;
-					this.buttons["creditMenuButton"].clickResolution();
 					this.buttonClickDelay = 0;
 				}
 			}
@@ -348,7 +326,11 @@ app.cyber_fighter = {
 				this.drawLib.drawBackgroundWithStroke(this.ctx, "black", "#008888", new app.vector(this.WIDTH/3, backgroundHeightPadding/2), new app.vector(this.WIDTH/3, this.HEIGHT - backgroundHeightPadding) );
 				this.buttons["menuPlayButton"].draw(this.ctx, app.mouse);
 				this.buttons["menuCustomButton"].draw(this.ctx, app.mouse);
-				this.buttons["menuCreditButton"].draw(this.ctx, app.mouse);
+				
+				this.ctx.save();
+				this.ctx.textAlign = "center";
+				this.drawLib.drawText(this.ctx, "Ryan Farrell & Brian Nugent 2014", "12pt Play", "white",  new app.vector(this.WIDTH/2, this.HEIGHT - 50));
+				this.ctx.restore();
 				break;
 			case(this.gameState.custom): //customization screen
 				var boxWidth = this.WIDTH/4;
