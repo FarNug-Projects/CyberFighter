@@ -16,11 +16,6 @@ app.Emitter=function(){
 		this.expansionRate = 0.5;
 		this.decayRate = 5;
 		this.lifetime = 100;
-
-		
-		
-
-		//this.alpha = 0;
 		
 		// private
 		this.particles = undefined;
@@ -106,8 +101,6 @@ app.Emitter=function(){
 			}
 		}
 	};
-			
-			
 			
 	// "private" method
 	function initParticle(obj, p, emitterPoint){

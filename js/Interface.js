@@ -26,6 +26,8 @@ app.Interface = {
 	player2: undefined,
 	p1ColorIndex: 0,
 	p2ColorIndex: 4,
+	previousP1Index: 0,
+	previousP2Index: 0,
 	
 
 	init : function(cyberFighter) 
@@ -132,10 +134,10 @@ app.Interface = {
 		
 		this.DrawLib.drawText(ctx, "GAME OVER", "40pt Play", "#008888",  new app.Vector(this.WIDTH/2, this.HEIGHT/4 + textPad));
 		if(this.player2.isDead) {
-			this.DrawLib.drawText(ctx, "Player One Wins!", "40pt Play", this.selectedP1Color,  new app.Vector(this.WIDTH/2, 2*(this.HEIGHT/5) + textPad));
+			this.DrawLib.drawText(ctx, "Player One Wins!", "40pt Play", this.player1.color,  new app.Vector(this.WIDTH/2, 2*(this.HEIGHT/5) + textPad));
 		}
 		if(this.player1.isDead) {
-			this.DrawLib.drawText(ctx, "Player Two Wins!", "40pt Play", this.selectedP2Color,  new app.Vector(this.WIDTH/2, 2*(this.HEIGHT/5) + textPad));
+			this.DrawLib.drawText(ctx, "Player Two Wins!", "40pt Play", this.player2.color,  new app.Vector(this.WIDTH/2, 2*(this.HEIGHT/5) + textPad));
 		}
 		if(this.player1.isDead && this.player2.isDead) {
 			this.DrawLib.drawText(ctx, "Draw", "40pt Play", "#008888",  new app.Vector(this.WIDTH/2, 2*(this.HEIGHT/4)));
@@ -197,57 +199,128 @@ app.Interface = {
 	updateCustomMenu: function(dt) //update custom
 	{
 		this.buttonClickDelay += dt;
+		
+		this.prevousP1Index = this.p1ColorIndex;
+		this.prevousP2Index = this.p2ColorIndex;
 			
-			if(this.buttonClickDelay >= 0.5)
-			{
-				if (this.buttonClicked("customMenuButton")) {
-				
-					this.cyberFighters.currentState = this.cyberFighters.gameState.mainMenu;
-					this.buttons["customMenuButton"].clickResolution();
-					this.buttonClickDelay = 0;
-				}
-				
-				//Customization Code			
-				if(this.buttonClicked("p1ColorLeft")) {
-					this.p1ColorIndex--;
-					if(p1ColorIndex == -1) {
-						p1ColorIndex = 5;
-					}
-					this.player1.setColor(this.colorArray[this.p1ColorIndex]);
-					this.buttons["p1ColorLeft"].clickResolution();
-					this.buttonClickDelay = 0;
-				}
-				
-				if(this.buttonClicked("p1ColorRight")) {
-					this.p1ColorIndex++;
-					if(this.p1ColorIndex == 6) {
-						this.p1ColorIndex = 0;
-					}
-					this.player1.setColor(this.colorArray[this.p1ColorIndex]);
-					this.buttons["p1ColorRight"].clickResolution();
-					this.buttonClickDelay = 0;
-				}
-				
-				if(this.buttonClicked("p2ColorLeft")) {
-					this.p2ColorIndex--;
-					if(this.p2ColorIndex == -1) {
-						this.p2ColorIndex = 5;
-					}
-					this.player2.setColor(this.colorArray[this.p2ColorIndex]);
-					this.buttons["p2ColorLeft"].clickResolution();
-					this.buttonClickDelay = 0;
-				}
-				
-				if(this.buttonClicked("p2ColorRight")) {
-					this.p2ColorIndex++;
-					if(this.p2ColorIndex == 6) {
-						this.p2ColorIndex = 0;
-					}
-					this.player2.setColor(this.colorArray[this.p2ColorIndex]);
-					this.buttons["p2ColorRight"].clickResolution();
-					this.buttonClickDelay = 0;
-				}
+		if(this.buttonClickDelay >= 0.5)
+		{
+			if (this.buttonClicked("customMenuButton")) {
+			
+				this.cyberFighters.currentState = this.cyberFighters.gameState.mainMenu;
+				this.buttons["customMenuButton"].clickResolution();
+				this.buttonClickDelay = 0;
 			}
+			
+			//Customization Code			
+			if(this.buttonClicked("p1ColorLeft")) {
+				//check if a skip is necessary
+				if(this.p1ColorIndex == this.p2ColorIndex + 1)
+				{
+					this.p1ColorIndex --;
+				}
+				else if(this.p1ColorIndex == 0 && this.p2ColorIndex == 5)
+				{
+					this.p1ColorIndex--;
+				}
+				this.p1ColorIndex--;
+				this.buttons["p1ColorLeft"].clickResolution();
+				this.buttonClickDelay = 0;
+			}
+			
+			if(this.buttonClicked("p1ColorRight")) {
+				//check if a skip is necessary
+				if(this.p1ColorIndex == this.p2ColorIndex - 1)
+				{
+					this.p1ColorIndex ++;
+				}
+				else if(this.p1ColorIndex == 5 && this.p2ColorIndex == 0)
+				{
+					this.p1ColorIndex++;
+				}
+				this.p1ColorIndex++;
+				this.buttons["p1ColorRight"].clickResolution();
+				this.buttonClickDelay = 0;
+			}
+			
+			if(this.buttonClicked("p2ColorLeft")) {
+				//check if a skip is necessary
+				if(this.p2ColorIndex == this.p1ColorIndex + 1)
+				{
+					this.p2ColorIndex --;
+				}
+				else if(this.p2ColorIndex == 0 && this.p1ColorIndex == 5)
+				{
+					this.p2ColorIndex--;
+				}
+				this.p2ColorIndex--;
+				this.buttons["p2ColorLeft"].clickResolution();
+				this.buttonClickDelay = 0;
+			}
+			
+			if(this.buttonClicked("p2ColorRight")) {
+				//check if a skip is necessary
+				if(this.p2ColorIndex == this.p1ColorIndex - 1)
+				{
+					this.p2ColorIndex ++;
+				}
+				else if(this.p2ColorIndex == 5 && this.p1ColorIndex == 0)
+				{
+					this.p2ColorIndex++;
+				}
+				this.p2ColorIndex++;
+				this.buttons["p2ColorRight"].clickResolution();
+				this.buttonClickDelay = 0;
+			}
+		}
+		
+		//check if the index has changed
+		if(this.p1ColorIndex != this.previousP1Index)
+		{
+			//set the index to the correct value if it's > 6 or < 0
+			switch(this.p1ColorIndex)
+			{
+				case -1:
+					this.p1ColorIndex = 5;
+					break;
+				case -2:
+					this.p1ColorIndex = 4;
+					break;
+				case 6:
+					this.p1ColorIndex = 0;
+					break;
+				case 7:
+					this.p1ColorIndex = 1;
+					break;
+			}
+			
+			//set the color of the ship to the appropriate index
+			this.player1.setColor(this.colorArray[this.p1ColorIndex]);
+		}
+		//check if the index has changed
+		if(this.p2ColorIndex != this.previousP2Index)
+		{
+			//set the index to the correct value if it's > 6 or < 0
+			switch(this.p2ColorIndex)
+			{
+				case -1:
+					this.p2ColorIndex = 5;
+					break;
+				case -2:
+					this.p2ColorIndex = 4;
+					break;
+				case 6:
+					this.p2ColorIndex = 0;
+					break;
+				case 7:
+					this.p2ColorIndex = 1;
+					break;
+			}
+			
+			//set the color of the ship to the appropriate index
+			this.player1.setColor(this.colorArray[this.p1ColorIndex]);
+			this.player2.setColor(this.colorArray[this.p2ColorIndex]);
+		}
 	},
 	
 	drawCustomMenu: function(ctx) //draw the customization menu

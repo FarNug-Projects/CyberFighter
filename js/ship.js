@@ -304,8 +304,11 @@ app.Ship = function()
 		this.isActive = true;
 		this.isHit = false;
 		this.isDead = false;
+		
+		this.exhaust.createParticles(this.emitterPoint());
 	};
 	
+	//calculate where the emitter point should be
 	p.emitterPoint = function() {
 		var angleVec = new app.Vector(Math.cos(this.rotationAsRadians) * (this.size.x/2), Math.sin(this.rotationAsRadians) * (this.size.y/2));	
 		var differenceVec = this.position.difference(angleVec);
@@ -313,6 +316,7 @@ app.Ship = function()
 		return {x: differenceVec.x, y: differenceVec.y};
 	};
 	
+	//set the color of the ship and adjust where the image is drawn from
 	p.setColor = function(color) {
 		this.color = color;
 	

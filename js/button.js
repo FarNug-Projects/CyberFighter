@@ -1,15 +1,15 @@
 /*
 	Created originally for:
-			Friendly Fire
-	
-			Alex Fuerst, 
-			Mario Chuman,
-			David Erbelding,
-			Brian Nugent,
-			Ryan Farrell,
+		Friendly Fire
 
-			Game Design and Development 2
-			10/2/2014
+		Alex Fuerst, 
+		Mario Chuman,
+		David Erbelding,
+		Brian Nugent,
+		Ryan Farrell,
+
+		Game Design and Development 2
+		10/2/2014
 
 	Adapted for use in:
 		cyber_fighter.exe
@@ -35,8 +35,6 @@ app.Button = function()
 	function Button(text, font, fontColor, image,x,y,width,height) 
 	{
 		// Instance variables of Button
-		/*this.x = x;
-		this.y = y;*/
 		this.position = new app.Vector(x, y);
 		this.size = new app.Vector(width, height);
 		this.scale = 1;
@@ -88,8 +86,10 @@ app.Button = function()
 		ctx.save();
 		ctx.textAlign = "center";
 		ctx.textBaseline = "middle";
+		
 		//drawText(ctx, string, font, fillColor, position)
 		app.DrawLib.drawText(ctx, this.text, this.font, this.fontColor, this.position);
+		
 		ctx.restore();
 		
 		//handle any input
@@ -134,7 +134,6 @@ app.Button = function()
 	};//update
 	  
 	//This handles all input to be gathered from the mouse
-	//Event handler is in loader.js.  Coordinates are determined in FriendlyFire.js
 	function handleMouse(hovering,that,mouse)
 	{
 		//if hovering enlarge button and set click state to the mouse's click state

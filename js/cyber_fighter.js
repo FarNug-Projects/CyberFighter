@@ -246,7 +246,6 @@ app.Cyber_Fighter = {
 				{
 					if(this.app.keydown[this.app.KEYBOARD.KEY_ESC])
 					{
-						console.log("Escape Pressed");
 						this.currentState = this.gameState.pause;
 
 						this.escapePressed = true;
@@ -322,71 +321,6 @@ app.Cyber_Fighter = {
 				}
 				break;
 		}
-	
-		/*if(this.currentState == this.gameState.play)
-		{
-			if(this.escapePressed == false)
-			{
-				if(this.app.keydown[this.app.KEYBOARD.KEY_ESC])
-				{
-					console.log("Escape Pressed");
-					this.currentState = this.gameState.pause;
-
-					this.escapePressed = true;
-				}
-			}
-			else
-			{
-				if(!this.app.keydown[this.app.KEYBOARD.KEY_ESC])
-				{
-					this.escapePressed = false;
-				}
-			}
-		
-			//Player 1 input
-			if(this.app.keydown[this.app.KEYBOARD.KEY_A])
-			{
-				this.player1.rotate("left", this.dt);
-			}
-			if(this.app.keydown[this.app.KEYBOARD.KEY_D])
-			{
-				this.player1.rotate("right", this.dt);
-			}
-			if(this.app.keydown[this.app.KEYBOARD.KEY_W] == true)
-			{
-				this.player1.isAccelerating = true;
-			}
-			else if(this.app.keydown[this.app.KEYBOARD.KEY_W] == false)
-			{
-				this.player1.isAccelerating = false;
-			}
-			if(this.app.keydown[this.app.KEYBOARD.KEY_E])
-			{
-				this.player1.shoot();
-			}
-			
-			//Player 2 input
-			if(this.app.keydown[this.app.KEYBOARD.KEY_J])
-			{
-				this.player2.rotate("left", this.dt);
-			}
-			if(this.app.keydown[this.app.KEYBOARD.KEY_L])
-			{
-				this.player2.rotate("right", this.dt);
-			}
-			if(this.app.keydown[this.app.KEYBOARD.KEY_I] == true)
-			{
-				this.player2.isAccelerating = true;
-			}
-			else if(this.app.keydown[this.app.KEYBOARD.KEY_I] == false)
-			{
-				this.player2.isAccelerating = false;
-			}
-			if(this.app.keydown[this.app.KEYBOARD.KEY_U])
-			{
-				this.player2.shoot();
-			}
-		}*/
 		
 		if(this.currentState == this.gameState.pause)
 		{
