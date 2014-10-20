@@ -20,6 +20,9 @@ app.ship = function()
 		this.angle = angle;
 		this.angleChange = 4;
 		
+		// Sound variables
+		this.reviveSound = new Audio('audio/revive.mp3');
+		
 		//movement related variables
 		this.isAccelerating = false;
 		this.accelerationValue = 0.2;
@@ -35,7 +38,7 @@ app.ship = function()
 		//health related variables
 		this.health = 10;
 		this.maxHealth = 10;
-		this.lives = 0;
+		this.lives = 1;
 		this.startingLives = this.lives;
 		this.isActive = true;
 		this.isHit = false;
@@ -56,8 +59,9 @@ app.ship = function()
 		
 		//shooting related variables
 		this.cooldown = 0;
-		this.fireRate = 0.75;
+		this.fireRate = 0.45;
 		
+		/*
 		//image related variables
 		//source rows and columns
 		var row1 = 1;
@@ -67,7 +71,6 @@ app.ship = function()
 		var col1= 1;
 		var col2= 34;
 		var col3= 67;
-	
 		
 		//figure out which part of the image based off of color
 		switch(color)
@@ -96,7 +99,9 @@ app.ship = function()
 				this.sourcePosition = new app.vector(col3, row2);
 				this.hitSource = new app.vector(col3, row4);
 				break;
-		}
+		}*/
+		
+		this.setColor(color);
 		this.sourceSize = new app.vector(32, 32);
 		
 		// Exhaust
@@ -118,6 +123,9 @@ app.ship = function()
 			for (var i=0; i < this.bullets.length; i++) {
 				this.bullets[i].draw(ctx);
 			}
+			
+			// Draws the exhaust
+			this.exhaust.draw(ctx, this.color);
 		
 			ctx.save();
 		
@@ -144,10 +152,7 @@ app.ship = function()
 			
 			//app.drawLib.debugRect(ctx, this);
 
-			ctx.restore();
-			
-			// Draws the exhaust
-			this.exhaust.draw(ctx, this.color);
+			ctx.restore();			
 		}
 	};
 	
@@ -192,6 +197,7 @@ app.ship = function()
 			if(self.respawnTimer <=0)
 			{
 				this.respawn();
+				this.reviveSound.play();
 			}
 		}
 	};
@@ -335,15 +341,54 @@ app.ship = function()
 	};
 	
 	p.emitterPoint = function() {
-		/*return { 
-			x: this.position.x, 
-			y: this.position.y + this.size.y/2 + 2,
-		};*/
-		var angleVec = new app.vector(this.forward.x * (this.size.x/2), this.forward.y * (this.size.y/2));	
+		var angleVec = new app.vector(Math.cos(this.rotationAsRadians) * (this.size.x/2), Math.sin(this.rotationAsRadians) * (this.size.y/2));	
 		var differenceVec = this.position.difference(angleVec);
 		
 		return {x: differenceVec.x, y: differenceVec.y};
 	};
+	
+	p.setColor = function(color) {
+		this.color = color;
+	
+		//source rows and columns
+		var row1 = 1;
+		var row2 = 34;
+		var row3 = 67;
+		var row4 = 100;
+		var col1= 1;
+		var col2= 34;
+		var col3= 67;
+		
+		//figure out which part of the image based off of color
+		switch(color)
+		{	
+			case "red":
+				this.sourcePosition = new app.vector(col1, row1);
+				this.hitSource = new app.vector(col1, row3);
+				break;
+			case "orange":
+				this.sourcePosition = new app.vector(col2, row1);
+				this.hitSource = new app.vector(col2, row3);
+				break;
+			case "yellow":
+				this.sourcePosition = new app.vector(col3, row1);
+				this.hitSource = new app.vector(col3, row3);
+				break;
+			case "green":
+				this.sourcePosition = new app.vector(col1, row2);
+				this.hitSource = new app.vector(col1, row4);
+				break;
+			case "blue":
+				this.sourcePosition = new app.vector(col2, row2);
+				this.hitSource = new app.vector(col2, row4);
+				break;
+			case "purple":
+				this.sourcePosition = new app.vector(col3, row2);
+				this.hitSource = new app.vector(col3, row4);
+				break;
+		}
+	};
+	
 	
 	return ship;
 }();

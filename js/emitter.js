@@ -39,7 +39,7 @@ app.emitter=function(){
 			this.particles.push(initParticle(this, p, emitterPoint));
 		}
 		// log the particles
-		console.log(this.particles );
+		//console.log(this.particles );
 	};
 
 	

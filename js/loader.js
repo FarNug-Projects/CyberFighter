@@ -25,12 +25,13 @@ app.KEYBOARD = {
 	"KEY_L": 76,
 	"KEY_K": 75,
 	"KEY_H": 72,
+	"KEY_U": 85,
 	
 	"KEY_W": 87,
 	"KEY_A": 65,
 	"KEY_S": 83,
 	"KEY_D": 68,
-	"KEY_F": 70
+	"KEY_E": 69
 };
 
 app.IMAGES = 

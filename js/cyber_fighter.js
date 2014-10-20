@@ -35,14 +35,19 @@ app.cyber_fighter = {
 	currentState: undefined,
 	thisFrame:0,
 	lastFrame:0,
+	buttonClickDelay: 0,
 	
-	selectedP1Color: undefined,
-	selectedP2Color: undefined,
+	p1ColorIndex: 0,
+	p2ColorIndex: 4,
 	
 	buttons: undefined,
 	
 	escapePressed: undefined,
+	// Sounds
 	theme: undefined,
+	laser: undefined,
+	hit: undefined,
+	
     
     // methods
 	init : function() {
@@ -63,23 +68,31 @@ app.cyber_fighter = {
 				controls: 6
 			}
 			
-			this.currentState = this.gameState.mainMenu;
+			this.currentState = this.gameState.custom;
 			
-			this.selectedP1Color = "purple";
-			this.selectedP2Color = "orange";
+			this.colorArray = ["red", "orange", "yellow", "green", "blue", "purple"];
+			//this.p1ColorIndex = 0;
+			//this.p2ColorIndex = 4;
+			
+			
 			
 			this.buttons = {
 				//button(text, font, fontColor, image,x,y,width,height) 
 				"menuPlayButton" : new app.button("FIGHT", "24pt Play", "white", undefined, this.WIDTH/2, this.HEIGHT/2, 175, 50), 
 				"menuCustomButton" : new app.button("CUSTOMIZE", "22pt Play", "white", undefined, this.WIDTH/2, this.HEIGHT/2 + 75, 175, 50),
 				"menuCreditButton" : new app.button("CREDITS", "24pt Play", "white", undefined, this.WIDTH/2, this.HEIGHT/2 + 150, 175, 50),
-				"overMenuButton" : new app.button("MENU", "24pt Play", "white", undefined, this.WIDTH/4, 3*this.HEIGHT/4, 175, 50),
-				"overPlayButton" : new app.button("REMATCH", "24pt Play", "white", undefined, 3 * this.WIDTH/4, 3*this.HEIGHT/4, 175, 50),
+				"overMenuButton" : new app.button("MENU", "24pt Play", "white", undefined, this.WIDTH/2, (this.HEIGHT /2) + 130, 175, 50),
+				"overPlayButton" : new app.button("REMATCH", "24pt Play", "white", undefined, this.WIDTH/2, (this.HEIGHT /2) + 60, 175, 50),
 				"creditMenuButton" : new app.button("MENU", "24pt Play", "white", undefined, this.WIDTH/9 + 10, this.HEIGHT/10, 175, 50),
 				"customMenuButton" : new app.button("MENU", "24pt Play", "white", undefined, this.WIDTH/9 + 10, this.HEIGHT/10, 175, 50),
-				"pausePlayButton" : new app.button("RESUME", "24pt Play", "white", undefined, 3*this.WIDTH/4, (4* this.HEIGHT /5)/2, 175, 50), 
-				"pauseMenuButton" : new app.button("QUIT", "24pt Play", "white", undefined, this.WIDTH/4, (4* this.HEIGHT /5)/2, 175, 50),
-				"controlPlayButton" : new app.button("CONTINUE", "24pt Play", "white", undefined, this.WIDTH/2, this.HEIGHT -(this.HEIGHT /9) + 5, 175, 50), 
+				"pausePlayButton" : new app.button("RESUME", "24pt Play", "white", undefined, this.WIDTH/2, (this.HEIGHT /2) - 35, 175, 50), 
+				"pauseMenuButton" : new app.button("QUIT", "24pt Play", "white", undefined, this.WIDTH/2, (this.HEIGHT /2) + 35, 175, 50),
+				"controlPlayButton" : new app.button("CONTINUE", "24pt Play", "white", undefined, this.WIDTH/2, this.HEIGHT -(this.HEIGHT /9) + 5, 175, 50),
+				"p1ColorLeft" : new app.button("<<", "24pt Play", "white", undefined, ((this.WIDTH/16) * 1) + 66, ((this.HEIGHT/8) * 5) + 43, 50, 50),
+				"p1ColorRight" : new app.button(">>", "24pt Play", "white", undefined, ((this.WIDTH/16) * 4) + 60, ((this.HEIGHT/8) * 5) + 43, 50, 50),
+				"p2ColorLeft" : new app.button("<<", "24pt Play", "white", undefined, ((this.WIDTH/16) * 12) - 60, ((this.HEIGHT/8) * 5) + 43, 50, 50),
+				"p2ColorRight" : new app.button(">>", "24pt Play", "white", undefined, ((this.WIDTH/16) * 15) -  68, ((this.HEIGHT/8) * 5) + 43, 50, 50),
+				
 			}
 			
 			/* Player 1 ship */
@@ -90,7 +103,7 @@ app.cyber_fighter = {
 			image.src = this.app.IMAGES['design1'];
 			
 			//create the ship
-			this.player1 = new app.ship(image,this.WIDTH/4, this.HEIGHT/2.5, this.SHIP_WIDTH, this.SHIP_HEIGHT, 90, this.selectedP1Color)
+			this.player1 = new app.ship(image,this.WIDTH/4, this.HEIGHT/2.5, this.SHIP_WIDTH, this.SHIP_HEIGHT, 90, this.colorArray[this.p1ColorIndex])
 			
 			/* Player 2 ship */
 			var image = new Image();
@@ -99,16 +112,20 @@ app.cyber_fighter = {
 			image.src = this.app.IMAGES['design1'];
 			
 			//create the ship
-			this.player2 = new app.ship(image,3*this.WIDTH/4, this.HEIGHT/2.5, this.SHIP_WIDTH, this.SHIP_HEIGHT, -90, this.selectedP2Color)
+			this.player2 = new app.ship(image,3*this.WIDTH/4, this.HEIGHT/2.5, this.SHIP_WIDTH, this.SHIP_HEIGHT, -90, this.colorArray[this.p2ColorIndex])
 
 			//bool to control escape key input
 			this.escapePressed = false;
 			
 			this.update();
 			
-			this.theme = new Audio('audio/theme3.mp3');
-			this.theme.loop = true;
-			this.theme.play();
+			this.themeMusic = new Audio('audio/theme1.mp3');
+			this.themeMusic.loop = true;
+			this.themeMusic.play();
+			
+			this.laserSound = new Audio('audio/laser.mp3');
+			this.hitSound = new Audio('audio/hit.mp3');
+			
 	},
 	
 	update: function() {
@@ -127,72 +144,155 @@ app.cyber_fighter = {
 		//check for button clicking and switch state accordingly
 		if(this.currentState == this.gameState.mainMenu)
 		{
-			if (this.buttonClicked("menuPlayButton")) 
+			this.buttonClickDelay += this.dt;
+			
+			if(this.buttonClickDelay >= 0.5)
 			{
-				this.currentState = this.gameState.control;
-				this.player1.reset();
-				this.player2.reset();
-				this.buttons["menuPlayButton"].clickResolution();
+				if (this.buttonClicked("menuPlayButton")) 
+				{
+					this.currentState = this.gameState.control;
+					this.player1.reset();
+					this.player2.reset();
+					this.buttons["menuPlayButton"].clickResolution();
+					this.buttonClickDelay = 0;
+				}
+				if (this.buttonClicked("menuCustomButton")) 
+				{
+					this.currentState = this.gameState.custom;
+					this.buttons["menuCustomButton"].clickResolution();
+					this.buttonClickDelay = 0;
+				}
+				if (this.buttonClicked("menuCreditButton")) 
+				{
+					this.currentState = this.gameState.custom;
+					this.buttons["menuCreditButton"].clickResolution();
+					this.buttonClickDelay = 0;
+				}
 			}
-			if (this.buttonClicked("menuCustomButton")) 
-			{
-				this.currentState = this.gameState.custom;
-				this.buttons["menuCustomButton"].clickResolution();
-			}
-			if (this.buttonClicked("menuCreditButton")) 
-			{
-				this.currentState = this.gameState.custom;
-				this.buttons["menuCreditButton"].clickResolution();
-			}
-		}if(this.currentState == this.gameState.credit)
+		}
+		if(this.currentState == this.gameState.credit)
 		{
-			if (this.buttonClicked("creditMenuButton")) {
-				this.currentState = this.gameState.mainMenu;
-				this.buttons["creditMenuButton"].clickResolution();
+			this.buttonClickDelay += this.dt;
+			
+			if(this.buttonClickDelay >= 0.5)
+			{
+				if (this.buttonClicked("creditMenuButton")) {
+					this.currentState = this.gameState.mainMenu;
+					this.buttons["creditMenuButton"].clickResolution();
+					this.buttonClickDelay = 0;
+				}
 			}
-		}if(this.currentState == this.gameState.custom)
+		}
+		if(this.currentState == this.gameState.custom)
 		{
-			if (this.buttonClicked("customMenuButton")) {
-				this.currentState = this.gameState.mainMenu;
-				this.buttons["customMenuButton"].clickResolution();
+			this.buttonClickDelay += this.dt;
+			
+			if(this.buttonClickDelay >= 0.5)
+			{
+				if (this.buttonClicked("customMenuButton")) {
+					this.currentState = this.gameState.mainMenu;
+					this.buttons["customMenuButton"].clickResolution();
+					this.buttonClickDelay = 0;
+				}
+				
+				//WORKING AREA				
+				if(this.buttonClicked("p1ColorLeft")) {
+					this.p1ColorIndex--;
+					if(this.p1ColorIndex == -1) {
+						this.p1ColorIndex = 5;
+					}
+					this.player1.setColor(this.colorArray[this.p1ColorIndex%6]);
+					this.buttons["p1ColorLeft"].clickResolution();
+					this.buttonClickDelay = 0;
+				}
+				
+				if(this.buttonClicked("p1ColorRight")) {
+					this.p1ColorIndex++;
+					if(this.p1ColorIndex == 6) {
+						this.p1ColorIndex = 0;
+					}
+					this.player1.setColor(this.colorArray[this.p1ColorIndex%6]);
+					this.buttons["p1ColorRight"].clickResolution();
+					this.buttonClickDelay = 0;
+				}
+				
+				if(this.buttonClicked("p2ColorLeft")) {
+					this.p2ColorIndex--;
+					if(this.p2ColorIndex == -1) {
+						this.p2ColorIndex = 5;
+					}
+					this.player2.setColor(this.colorArray[this.p2ColorIndex%6]);
+					this.buttons["p2ColorLeft"].clickResolution();
+					this.buttonClickDelay = 0;
+				}
+				
+				if(this.buttonClicked("p2ColorRight")) {
+					this.p2ColorIndex++;
+					if(this.p2ColorIndex == 6) {
+						this.p2ColorIndex = 0;
+					}
+					this.player2.setColor(this.colorArray[this.p2ColorIndex%6]);
+					this.buttons["p2ColorRight"].clickResolution();
+					this.buttonClickDelay = 0;
+				}
 			}
 		}
 		if(this.currentState == this.gameState.gameOver)
 		{
-			if (this.buttonClicked("overPlayButton")) {
-				
-				this.currentState = this.gameState.play;
-				this.player1.reset();
-				this.player2.reset();
-				
-				this.buttons["overPlayButton"].clickResolution();
-				
-			}
-			if (this.buttonClicked("overMenuButton")) {
-				this.currentState = this.gameState.mainMenu;
-				this.buttons["overMenuButton"].clickResolution();
+			this.buttonClickDelay += this.dt;
+			
+			if(this.buttonClickDelay >= 0.5)
+			{
+				if (this.buttonClicked("overPlayButton")) {
+					
+					this.currentState = this.gameState.play;
+					this.player1.reset();
+					this.player2.reset();
+					
+					this.buttons["overPlayButton"].clickResolution();
+					
+					this.buttonClickDelay = 0;
+					
+				}
+				if (this.buttonClicked("overMenuButton")) {
+					this.currentState = this.gameState.mainMenu;
+					this.buttons["overMenuButton"].clickResolution();
+					this.buttonClickDelay = 0;
+				}
 			}
 		}
 		if(this.currentState == this.gameState.pause)
 		{
-			if (this.buttonClicked("pausePlayButton")) {
-				
-				this.currentState = this.gameState.play;
-				this.buttons["pausePlayButton"].clickResolution();
-				
-			}
-			if (this.buttonClicked("pauseMenuButton")) {
-				this.currentState = this.gameState.mainMenu;
-				this.buttons["pauseMenuButton"].clickResolution();
+			this.buttonClickDelay += this.dt;
+			
+			if(this.buttonClickDelay >= 0.5)
+			{
+				if (this.buttonClicked("pausePlayButton")) {
+					
+					this.currentState = this.gameState.play;
+					this.buttons["pausePlayButton"].clickResolution();
+					this.buttonClickDelay = 0;
+					
+				}
+				if (this.buttonClicked("pauseMenuButton")) {
+					this.currentState = this.gameState.mainMenu;
+					this.buttons["pauseMenuButton"].clickResolution();
+					this.buttonClickDelay = 0;
+				}
 			}
 		}
 		if(this.currentState == this.gameState.control)
 		{
-			if (this.buttonClicked("controlPlayButton")) {
-				
-				this.currentState = this.gameState.play;
-				this.buttons["controlPlayButton"].clickResolution();
-				
+			this.buttonClickDelay += this.dt;
+			
+			if(this.buttonClickDelay >= 0.5)
+			{
+				if (this.buttonClicked("controlPlayButton")) {
+					
+					this.currentState = this.gameState.play;
+					this.buttons["controlPlayButton"].clickResolution();
+					this.buttonClickDelay = 0;
+				}
 			}
 		}
 		if(this.currentState == this.gameState.play)
@@ -233,7 +333,7 @@ app.cyber_fighter = {
 		this.player2.draw(this.dt, this.ctx);
 		
 		//drawInterface(ctx, interfaceColor, infoColor)
-		this.drawPlayInterface(this.ctx, "#1F1F1F", "black");
+		this.drawGameInterface(this.ctx, "#1F1F1F", "black");
 	},
 	
 	// menu drawing code
@@ -251,7 +351,48 @@ app.cyber_fighter = {
 				this.buttons["menuCreditButton"].draw(this.ctx, app.mouse);
 				break;
 			case(this.gameState.custom): //customization screen
+				var boxWidth = this.WIDTH/4;
+				var boxHeight = this.HEIGHT/2;
+			
 				this.buttons["customMenuButton"].draw(this.ctx, app.mouse);
+				
+				this.drawLib.drawBackgroundWithStroke(this.ctx, "black", "#008888", new app.vector((this.WIDTH/12) + 10, (this.HEIGHT/10) * 3), new app.vector(boxWidth, boxHeight));
+				this.buttons["p1ColorLeft"].draw(this.ctx, app.mouse);
+				this.buttons["p1ColorRight"].draw(this.ctx, app.mouse);
+				this.ctx.save();
+				this.ctx.textAlign = "center";
+				this.drawLib.drawText(this.ctx, "COLOR", "22pt Play", "white",  new app.vector((this.WIDTH/5) + 20, this.HEIGHT - (this.HEIGHT/3) + 28));
+				this.ctx.restore();
+				
+				this.ctx.save();
+				this.ctx.textAlign = "center";
+				this.drawLib.drawText(this.ctx, "Player 1", "26pt Play", "white",  new app.vector((this.WIDTH/5) + 20, this.HEIGHT - (this.HEIGHT/3) - 170));
+				this.ctx.restore();
+				
+				
+				this.drawLib.drawBackgroundWithStroke(this.ctx, "black", "#008888", new app.vector((this.WIDTH/12) * 7 + 71, (this.HEIGHT/10) * 3), new app.vector(boxWidth, boxHeight));
+				this.buttons["p2ColorLeft"].draw(this.ctx, app.mouse);
+				this.buttons["p2ColorRight"].draw(this.ctx, app.mouse);
+				this.ctx.save();
+				this.ctx.textAlign = "center";
+				this.drawLib.drawText(this.ctx, "COLOR", "22pt Play", "white",  new app.vector(this.WIDTH - (this.WIDTH/5) - 20, this.HEIGHT - (this.HEIGHT/3) + 28));
+				this.ctx.restore();
+				
+				this.ctx.save();
+				this.ctx.textAlign = "center";
+				this.drawLib.drawText(this.ctx, "Player 2", "26pt Play", "white",  new app.vector(this.WIDTH - (this.WIDTH/5) - 20, this.HEIGHT - (this.HEIGHT/3) - 170));
+				this.ctx.restore();
+				
+				// Draw the ships
+				var ship1Pos = new app.vector((this.WIDTH/12) + 10 + (boxWidth/2) - (this.player1.size.x/2), this.HEIGHT/2 - 15);
+				var ship2Pos = new app.vector(((this.WIDTH/12) * 7) + 71 + (boxWidth/2) - (this.player2.size.x/2), this.HEIGHT/2 - 15);
+				
+				this.drawLib.drawImage(this.ctx, this.player1.image, this.player1.sourcePosition , this.player1.sourceSize, ship1Pos, this.player1.size, 90);
+				this.drawLib.drawImage(this.ctx, this.player2.image, this.player2.sourcePosition, this.player2.sourceSize, ship2Pos, this.player2.size, 90);
+
+				
+				
+				
 				break;
 			case(this.gameState.pause): //pause screen
 				this.drawGame();
@@ -304,7 +445,7 @@ app.cyber_fighter = {
 					console.log("Player 1 shot");
 					bullet.active = false;
 					self.player1.bulletHit();
-					
+					self.hitSound.play();
 				}
 			});
 		}
@@ -320,6 +461,7 @@ app.cyber_fighter = {
 					console.log("Player 2 shot");
 					bullet.active = false;
 					self.player2.bulletHit();
+					self.hitSound.play();
 				}
 			
 			});
@@ -375,9 +517,10 @@ app.cyber_fighter = {
 			{
 				this.player1.isAccelerating = false;
 			}
-			if(this.app.keydown[this.app.KEYBOARD.KEY_F])
+			if(this.app.keydown[this.app.KEYBOARD.KEY_E])
 			{
 				this.player1.shoot();
+				this.laserSound.play();
 			}
 			
 			//Player 2 input
@@ -397,9 +540,10 @@ app.cyber_fighter = {
 			{
 				this.player2.isAccelerating = false;
 			}
-			if(this.app.keydown[this.app.KEYBOARD.KEY_H])
+			if(this.app.keydown[this.app.KEYBOARD.KEY_U])
 			{
 				this.player2.shoot();
+				this.laserSound.play();
 			}
 		}
 		
@@ -426,7 +570,7 @@ app.cyber_fighter = {
 	},
 	
 	//draw the interface for the game
-	drawPlayInterface: function(ctx, interfaceColor, infoColor) {
+	drawGameInterface: function(ctx, interfaceColor, infoColor) {
 		// Draws the "ui"
 		var interfacePos = new app.vector(0, this.HEIGHT - (this.HEIGHT/5)); 
 		var interfaceSize = new app.vector(this.WIDTH, (this.HEIGHT/5));
