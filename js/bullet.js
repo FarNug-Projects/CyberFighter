@@ -6,7 +6,7 @@ app.Bullet = function() {
 	function Bullet(x, y, speed, angle, color) {
 		// ivars
 		this.active = true;
-		this.color = color;
+		//this.color = color;
 		this.position = new app.Vector(x,y);
 		this.size = new app.Vector(5, 5);
 		this.speed = speed;
@@ -22,6 +22,44 @@ app.Bullet = function() {
 		this.soundPlayed = false;
 		this.hitSound = new Audio('audio/hit.mp3');  // Source: soundbible.com
 		this.hitSound.volume = 0.2;
+		
+		//color variables
+		this.red = 0;
+		this.green = 0;
+		this.blue = 0;
+		
+		switch(color) {
+			case "purple":
+				this.red = 255;
+				this.green = 0;
+				this.blue = 237;
+				break;
+			case "yellow":
+				this.red = 250;
+				this.green = 255;
+				this.blue = 0;
+				break;
+			case "orange":
+				this.red = 255;
+				this.green = 152;
+				this.blue = 0;
+				break;
+			case "green":
+				this.red = 165;
+				this.green = 255;
+				this.blue = 0;
+				break;
+			case "blue":
+				this.red = 0;
+				this.green = 231;
+				this.blue = 255;
+				break;
+			case "red":
+				this.red = 255;
+				this.green = 0;
+				this.blue = 0;
+				break;
+		}
 	}
 	
 	var p = Bullet.prototype;
@@ -50,7 +88,7 @@ app.Bullet = function() {
 	//draw the bullet
 	p.draw = function(ctx) {
 		ctx.save();
-		ctx.fillStyle = this.color;
+		ctx.fillStyle = "rgba(" + this.red + "," + this.green + "," + this.blue + "," + 1 + ")";
 		ctx.strokeStyle = "white";
 		ctx.lineWidth = 0.75;
 		ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y);
