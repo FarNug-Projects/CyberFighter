@@ -51,6 +51,7 @@ app.Button = function()
 		
 		//button click sound
 		this.clickedSound = new Audio('audio/button-09.mp3'); // Source: soundjay.com
+		this.clickedSound.volume = 0.5;
 		
 	};
 		

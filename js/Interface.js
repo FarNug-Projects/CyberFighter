@@ -210,8 +210,8 @@ app.Interface = {
 	{
 		this.buttonClickDelay += dt;
 		
-		this.prevousP1Index = this.p1ColorIndex;
-		this.prevousP2Index = this.p2ColorIndex;
+		this.previousP1Index = this.p1ColorIndex;
+		this.previousP2Index = this.p2ColorIndex;
 			
 		if(this.buttonClickDelay >= 0.5)
 		{
@@ -263,6 +263,7 @@ app.Interface = {
 				{
 					this.p2ColorIndex--;
 				}
+				
 				this.p2ColorIndex--;
 				this.buttons["p2ColorLeft"].clickResolution();
 				this.buttonClickDelay = 0;
@@ -328,7 +329,6 @@ app.Interface = {
 			}
 			
 			//set the color of the ship to the appropriate index
-			this.player1.setColor(this.colorArray[this.p1ColorIndex]);
 			this.player2.setColor(this.colorArray[this.p2ColorIndex]);
 		}
 	},

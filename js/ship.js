@@ -56,7 +56,7 @@ app.Ship = function()
 		
 		//shooting related variables
 		this.cooldown = 0;
-		this.fireRate = 0.45;
+		this.fireRate = 1.85;
 		
 		//image related variables
 
@@ -73,12 +73,7 @@ app.Ship = function()
 		// Sound variables
 		this.reviveSound = new Audio('audio/revive.mp3');  // Source: soundbible.com
 		this.engineSound = new Audio('audio/engine.mp3');  // Source: soundbible.com
-		this.engineSound.volume = 1.0;
-		this.laserSound = new Audio('audio/laser.mp3');  // Source: soundbible.com
-		this.laserSound.volume = 0.2;
-		this.hitSound = new Audio('audio/hit.mp3');  // Source: soundbible.com
-		this.hitSound.volume = 0.2;
-	
+		this.engineSound.volume = 0.8;
 	};
 	
 	Ship.app = undefined;
@@ -93,7 +88,10 @@ app.Ship = function()
 			}
 			
 			// Draws the exhaust
-			this.exhaust.draw(ctx, this.color);
+			if(this.isAccelerating)
+			{
+				this.exhaust.draw(ctx, this.color);
+			}
 		
 			ctx.save();
 		
@@ -145,6 +143,7 @@ app.Ship = function()
 		
 		// Exhaust
 		this.exhaust.update(this.emitterPoint());
+		
 		
 		//respawn
 		var self = this;
@@ -202,6 +201,10 @@ app.Ship = function()
 			this.velocity = this.velocity.sum(this.acceleration);
 			this.velocity.limit(this.maxSpeed);
 		}
+		else
+		{
+			this.engineSound.pause();
+		}
 		
 		this.engineSound.loop = false;
 		//multiply the velocity by friction to slow
@@ -214,7 +217,7 @@ app.Ship = function()
 	//shoot: spawn a bullet at the front of the ship
 	p.shoot = function() {
 	
-		this.laserSound.play();
+		//this.laserSound.play();
 	
 		if(this.cooldown <= 0 && this.isActive)
 		{
@@ -234,7 +237,6 @@ app.Ship = function()
 	
 	//bullet collision resolution
 	p.bulletHit = function() {
-		this.hitSound.play();
 		this.health -= 1;
 		this.isHit = true;
 	};
@@ -304,6 +306,7 @@ app.Ship = function()
 		this.angle = this.spawnAngle;
 		this.health = this.maxHealth;
 		this.lives = this.startingLives;
+		this.isAccelerating = false;
 		this.isActive = true;
 		this.isHit = false;
 		this.isDead = false;

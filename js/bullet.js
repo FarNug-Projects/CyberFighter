@@ -15,10 +15,25 @@ app.Bullet = function() {
 		//screen size
 		this.screenWidth = app.Cyber_Fighter.WIDTH;
 		this.screenHeight = app.Cyber_Fighter.HEIGHT;
+		
+		//audio variables
+		this.laserSound = new Audio('audio/laser.mp3');  // Source: soundbible.com
+		this.laserSound.volume = 0.2;
+		this.soundPlayed = false;
+		this.hitSound = new Audio('audio/hit.mp3');  // Source: soundbible.com
+		this.hitSound.volume = 0.2;
 	}
 	
 	var p = Bullet.prototype;
+	
+	//update the bullet
 	p.update = function(dt, ctx) {
+		if(!this.soundPlayed)
+		{
+			this.laserSound.play();
+			this.soundPlayed = true;
+		}
+	
 		var rotationAsRadians = (this.angle - 90) * (Math.PI/180);
 		var vx = Math.cos(rotationAsRadians) * this.speed;
 		var vy = Math.sin(rotationAsRadians) * this.speed;
@@ -32,6 +47,7 @@ app.Bullet = function() {
 		}
 	};
 	
+	//draw the bullet
 	p.draw = function(ctx) {
 		ctx.save();
 		ctx.fillStyle = this.color;
@@ -41,6 +57,13 @@ app.Bullet = function() {
 		ctx.strokeRect(this.position.x, this.position.y, this.size.x, this.size.y);
 		ctx.restore();
 	};
+	
+	//code for collision resolution
+	p.collisionResolution = function()
+	{
+		this.hitSound.play();
+		this.active = false;
+	}
 	
 	// Private method
 	function checkBounds(x, y) {

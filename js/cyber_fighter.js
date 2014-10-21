@@ -197,6 +197,8 @@ app.Cyber_Fighter = {
 				if(this.player1.isDead == true || this.player2.isDead == true)
 				{
 					this.currentState = this.gameState.gameOver;
+					this.player1.isAccelerating = false;
+					this.player2.isAccelerating = false;
 				}
 				break;
 		}
@@ -213,7 +215,7 @@ app.Cyber_Fighter = {
 				if(self.collides(bullet, self.player1))
 				{
 					//collision stuff
-					bullet.active = false;
+					bullet.collisionResolution();
 					self.player1.bulletHit();
 				}
 			});
@@ -227,7 +229,7 @@ app.Cyber_Fighter = {
 				if(self.collides(bullet, self.player2))
 				{
 					//collision stuff
-					bullet.active = false;
+					bullet.collisionResolution();
 					self.player2.bulletHit();
 				}
 			
