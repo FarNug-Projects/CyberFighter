@@ -83,13 +83,17 @@ app.Bullet = function() {
 	
 	//draw the bullet
 	p.draw = function(ctx) {
-		ctx.save();
+		/*ctx.save();
 		ctx.fillStyle = "rgba(" + this.red + "," + this.green + "," + this.blue + "," + 1 + ")";
 		ctx.strokeStyle = "white";
 		ctx.lineWidth = 0.75;
-		ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y);
+		ctx.fillRect(this.position.x - this., this.position.y, this.size.x, this.size.y);
 		ctx.strokeRect(this.position.x, this.position.y, this.size.x, this.size.y);
-		ctx.restore();
+		ctx.restore();*/
+		
+		var col = "rgba(" + this.red + "," + this.green + "," + this.blue + "," + 1 + ")";
+		
+		app.DrawLib.drawRectWithStroke(ctx, col, "white", this.position, this.size, this.angle);
 	};
 	
 	//code for collision resolution

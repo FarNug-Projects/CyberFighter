@@ -35,7 +35,7 @@ app.Ship = function()
 		//health related variables
 		this.health = 10;
 		this.maxHealth = 10;
-		this.lives = 1;
+		this.lives = 2;
 		this.startingLives = this.lives;
 		this.isActive = true;
 		this.isHit = false;
@@ -56,7 +56,7 @@ app.Ship = function()
 		
 		//shooting related variables
 		this.cooldown = 0;
-		this.fireRate = 1.85;
+		this.fireRate = 2;
 		
 		//image related variables
 		this.setColor(color);

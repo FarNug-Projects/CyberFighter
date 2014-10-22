@@ -140,13 +140,13 @@ app.Interface = {
 		var textPad = 50;
 		
 		this.DrawLib.drawText(ctx, "GAME OVER", "40pt Play", "#008888",  new app.Vector(this.WIDTH/2, this.HEIGHT/4 + textPad));
-		if(this.player2.isDead) {
+		if(this.player2.isDead && !this.player1.isDead) {
 			this.DrawLib.drawText(ctx, "Player One Wins!", "40pt Play", this.player1.color,  new app.Vector(this.WIDTH/2, 2*(this.HEIGHT/5) + textPad));
 		}
-		if(this.player1.isDead) {
+		else if(this.player1.isDead && !this.player2.isDead) {
 			this.DrawLib.drawText(ctx, "Player Two Wins!", "40pt Play", this.player2.color,  new app.Vector(this.WIDTH/2, 2*(this.HEIGHT/5) + textPad));
 		}
-		if(this.player1.isDead && this.player2.isDead) {
+		else if(this.player1.isDead && this.player2.isDead) {
 			this.DrawLib.drawText(ctx, "Draw", "40pt Play", "#008888",  new app.Vector(this.WIDTH/2, 2*(this.HEIGHT/4)));
 		}
 		this.buttons["overPlayButton"].draw(ctx, app.mouse);

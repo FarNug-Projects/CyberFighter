@@ -73,6 +73,17 @@ app.DrawLib = {
 		ctx.restore();
 	},
 	
+	//draw a rectangle with a stroke around it
+	drawRectWithStroke: function(ctx, fillColor, strokeColor, position, size, r) {
+		ctx.save();
+		ctx.translate(position.x - size.x/2,position.y-size.y/2);
+		ctx.rotate(r * (Math.PI/180));
+		ctx.fillStyle = fillColor;
+		ctx.strokeStyle = strokeColor;
+		ctx.fillRect(-size.x/2,-size.y/2,size.x, size.y);
+		ctx.strokeRect(-size.x/2,-size.y/2,size.x, size.y);
+		ctx.restore();
+	},
 	
 	/* Custom code for Cyberfighters*/
 	drawGridBackground: function(ctx, position, size) {
