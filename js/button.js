@@ -102,8 +102,8 @@ app.Button = function()
 	//reset the button's click state
 	p.clickResolution = function()
 	{
-		this.clickedSound.pause(); // change
-		this.clickedSound.play(); // change
+		this.soundHandler.buttonClickedSoundPause();
+		this.soundHandler.buttonClickedSoundPlay();
 		this.scale = 1.0;
 		this.clicked = false;
 	}

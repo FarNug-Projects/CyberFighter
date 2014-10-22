@@ -21,6 +21,11 @@ app.SoundHandler = function()
 	//constructor for the vector class
 	function SoundHandler()
 	{
+		//theme music
+		this.themeMusic = new Audio('audio/theme1.mp3');// source: freemusicarchive.org
+		this.themeMusic.loop = true;
+		this.themeMusic.volume = 0.2;
+	
 		//button click sound
 		this.clickedSound = new Audio('audio/button-09.mp3'); // Source: soundjay.com
 		this.clickedSound.volume = 0.5;
@@ -28,7 +33,6 @@ app.SoundHandler = function()
 		//bullet sounds
 		this.laserSound = new Audio('audio/laser.mp3');  // Source: soundbible.com
 		this.laserSound.volume = 0.2;
-		this.soundPlayed = false;
 		this.hitSound = new Audio('audio/hit.mp3');  // Source: soundbible.com
 		this.hitSound.volume = 0.2;
 		
@@ -36,9 +40,21 @@ app.SoundHandler = function()
 		this.reviveSound = new Audio('audio/revive.mp3');  // Source: soundbible.com
 		this.engineSound = new Audio('audio/engine.mp3');  // Source: soundbible.com
 		this.engineSound.volume = 0.8;
+		this.engineSound.loop = true;
 	};
 	
 	var p = SoundHandler.prototype;
+	
+	//play the theme
+	p.themePlay = function()
+	{
+		this.themeMusic.play();
+	};
+	//pause the theme
+	p.themePause = function()
+	{
+		this.themeMusic.pause();
+	};
 	
 	//play button related sound
 	p.buttonClickedSoundPlay = function()
@@ -87,7 +103,6 @@ app.SoundHandler = function()
 	p.shipEngineSoundPlay = function()
 	{	
 		this.engineSound.play();
-		this.engineSound.loop = true;
 	}
 	
 	//pause ship engine sound

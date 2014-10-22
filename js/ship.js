@@ -191,7 +191,6 @@ app.Ship = function()
 		if(this.isAccelerating)
 		{
 			this.soundHandler.shipEngineSoundPlay();
-			this.engineSound.loop = true;
 			this.acceleration = new app.Vector(forwardAccel.x, forwardAccel.y);
 			this.acceleration.limit(this.accelerationLimit);
 			
@@ -203,7 +202,6 @@ app.Ship = function()
 			this.soundHandler.shipEngineSoundPause();
 		}
 		
-		this.engineSound.loop = false;
 		//multiply the velocity by friction to slow
 		this.velocity = this.velocity.mult(this.friction);
 		

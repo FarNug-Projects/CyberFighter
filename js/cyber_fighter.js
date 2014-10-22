@@ -45,10 +45,7 @@ app.Cyber_Fighter = {
 	
 	escapePressed: undefined,
 	// Sounds
-	theme: undefined,
-	laser: undefined,
-	hit: undefined,
-	engine: undefined,
+	soundHandler: undefined,
 	
 	// Images
 	instructions: undefined,
@@ -72,26 +69,6 @@ app.Cyber_Fighter = {
 			}
 			
 			this.currentState = this.gameState.mainMenu;
-			
-//			this.colorArray = ["red", "orange", "yellow", "green", "blue", "purple"];
-			
-			
-			this.buttons = {
-				//button(text, font, fontColor, image,x,y,width,height) 
-				"menuPlayButton" : new app.Button("FIGHT", "24pt Play", "white", undefined, this.WIDTH/2, this.HEIGHT/2, 175, 50), 
-				"menuCustomButton" : new app.Button("CUSTOMIZE", "22pt Play", "white", undefined, this.WIDTH/2, this.HEIGHT/2 + 75, 175, 50),
-				"overMenuButton" : new app.Button("MENU", "24pt Play", "white", undefined, this.WIDTH/2, (this.HEIGHT /2) + 130, 175, 50),
-				"overPlayButton" : new app.Button("REMATCH", "24pt Play", "white", undefined, this.WIDTH/2, (this.HEIGHT /2) + 60, 175, 50),
-				"customMenuButton" : new app.Button("MENU", "24pt Play", "white", undefined, this.WIDTH/9 + 10, this.HEIGHT/10, 175, 50),
-				"pausePlayButton" : new app.Button("RESUME", "24pt Play", "white", undefined, this.WIDTH/2, (this.HEIGHT /2) - 35, 175, 50), 
-				"pauseMenuButton" : new app.Button("QUIT", "24pt Play", "white", undefined, this.WIDTH/2, (this.HEIGHT /2) + 35, 175, 50),
-				"controlPlayButton" : new app.Button("CONTINUE", "24pt Play", "white", undefined, this.WIDTH/2, this.HEIGHT -(this.HEIGHT /9) + 5, 175, 50),
-				"p1ColorLeft" : new app.Button("<", "24pt Play", "white", undefined, ((this.WIDTH/16) * 1) + 66, ((this.HEIGHT/8) * 5) + 43, 30, 30),
-				"p1ColorRight" : new app.Button(">", "24pt Play", "white", undefined, ((this.WIDTH/16) * 4) + 60, ((this.HEIGHT/8) * 5) + 43, 30, 30),
-				"p2ColorLeft" : new app.Button("<", "24pt Play", "white", undefined, ((this.WIDTH/16) * 12) - 60, ((this.HEIGHT/8) * 5) + 43, 30, 30),
-				"p2ColorRight" : new app.Button(">", "24pt Play", "white", undefined, ((this.WIDTH/16) * 15) -  68, ((this.HEIGHT/8) * 5) + 43, 30, 30),
-				
-			}
 			
 			//initialize the interface
 			this.Interface.init(this);
@@ -128,10 +105,8 @@ app.Cyber_Fighter = {
 			this.escapePressed = false;			
 			
 			//sound variables
-			this.themeMusic = new Audio('audio/theme1.mp3');
-			this.themeMusic.loop = true;
-			this.themeMusic.volume = 0.2;
-			this.themeMusic.play();
+			this.soundHandler = new app.SoundHandler();
+			this.soundHandler.themePlay();
 			
 			this.updateAndDraw();
 	},
@@ -352,11 +327,4 @@ app.Cyber_Fighter = {
 			}
 		}
 	},
-	
-	//Test to see if a certain button is clicked or not
-	/* Adapted from Friendly Fire */
-	buttonClicked : function(buttonTitle)
-	{
-		return this.buttons[buttonTitle].isClicked();
-	}
 }

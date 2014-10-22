@@ -64,7 +64,7 @@ app.Bullet = function() {
 	p.update = function(dt, ctx) {
 		if(!this.soundPlayed)
 		{
-			this.laserSound.play(); //change
+			this.soundHandler.bulletFiredSoundPlay();
 			this.soundPlayed = true;
 		}
 	
@@ -95,7 +95,7 @@ app.Bullet = function() {
 	//code for collision resolution
 	p.collisionResolution = function()
 	{
-		this.hitSound.play(); // change
+		this.soundHandler.bulletHitSoundPlay();
 		this.active = false;
 	}
 	
