@@ -49,9 +49,8 @@ app.Button = function()
 		this.color = "#454545";
 		this.clicked = false;
 		
-		//button click sound
-		this.clickedSound = new Audio('audio/button-09.mp3'); // Source: soundjay.com
-		this.clickedSound.volume = 0.5;
+		//audio
+		this.soundHandler = new app.SoundHandler();
 		
 	};
 		
@@ -103,7 +102,8 @@ app.Button = function()
 	//reset the button's click state
 	p.clickResolution = function()
 	{
-		this.clickedSound.play();
+		this.clickedSound.pause(); // change
+		this.clickedSound.play(); // change
 		this.scale = 1.0;
 		this.clicked = false;
 	}

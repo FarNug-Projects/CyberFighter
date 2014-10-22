@@ -59,7 +59,6 @@ app.Ship = function()
 		this.fireRate = 1.85;
 		
 		//image related variables
-
 		this.setColor(color);
 		this.sourceSize = new app.Vector(32, 32);
 		
@@ -71,9 +70,7 @@ app.Ship = function()
 		this.exhaust.createParticles(this.emitterPoint());
 		
 		// Sound variables
-		this.reviveSound = new Audio('audio/revive.mp3');  // Source: soundbible.com
-		this.engineSound = new Audio('audio/engine.mp3');  // Source: soundbible.com
-		this.engineSound.volume = 0.8;
+		this.soundHandler = new app.SoundHandler();
 	};
 	
 	Ship.app = undefined;
@@ -162,7 +159,7 @@ app.Ship = function()
 			if(self.respawnTimer <=0)
 			{
 				this.respawn();
-				this.reviveSound.play();
+				this.soundHandler.shipReviveSoundPlay();
 			}
 		}
 	};
@@ -193,7 +190,7 @@ app.Ship = function()
 		var self = this;
 		if(this.isAccelerating)
 		{
-			this.engineSound.play();
+			this.soundHandler.shipEngineSoundPlay();
 			this.engineSound.loop = true;
 			this.acceleration = new app.Vector(forwardAccel.x, forwardAccel.y);
 			this.acceleration.limit(this.accelerationLimit);
@@ -203,7 +200,7 @@ app.Ship = function()
 		}
 		else
 		{
-			this.engineSound.pause();
+			this.soundHandler.shipEngineSoundPause();
 		}
 		
 		this.engineSound.loop = false;

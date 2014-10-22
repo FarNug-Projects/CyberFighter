@@ -17,11 +17,7 @@ app.Bullet = function() {
 		this.screenHeight = app.Cyber_Fighter.HEIGHT;
 		
 		//audio variables
-		this.laserSound = new Audio('audio/laser.mp3');  // Source: soundbible.com
-		this.laserSound.volume = 0.2;
-		this.soundPlayed = false;
-		this.hitSound = new Audio('audio/hit.mp3');  // Source: soundbible.com
-		this.hitSound.volume = 0.2;
+		this.soundHandler = new app.SoundHandler();
 		
 		//color variables
 		this.red = 0;
@@ -68,7 +64,7 @@ app.Bullet = function() {
 	p.update = function(dt, ctx) {
 		if(!this.soundPlayed)
 		{
-			this.laserSound.play();
+			this.laserSound.play(); //change
 			this.soundPlayed = true;
 		}
 	
@@ -99,7 +95,7 @@ app.Bullet = function() {
 	//code for collision resolution
 	p.collisionResolution = function()
 	{
-		this.hitSound.play();
+		this.hitSound.play(); // change
 		this.active = false;
 	}
 	
